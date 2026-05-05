@@ -10,6 +10,6 @@ jobs:
   quality-gates:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run quality gates
         run: scripts/check.sh

@@ -11,7 +11,7 @@ jobs:
   quality-gates:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run quality gates
         run: scripts/check.sh
       - name: Run E2E tests
@@ -21,7 +21,7 @@ jobs:
     needs: quality-gates
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build release binary
         run: swift build -c release
       - name: Prepare artifact
@@ -29,7 +29,7 @@ jobs:
           binary="$(swift build -c release --show-bin-path)/spells"
           cp "$binary" spells-macos-arm64
           shasum -a 256 spells-macos-arm64 > spells-macos-arm64.sha256
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: spells-macos-arm64
           path: |
@@ -40,8 +40,8 @@ jobs:
     needs: build-arm64
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
         with:
           name: spells-macos-arm64
           path: artifacts/
