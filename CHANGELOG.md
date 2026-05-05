@@ -6,6 +6,8 @@ The format is based on Keep a Changelog, and this project uses Conventional Comm
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-05-05
+
 ### Added
 
 - Phase 3 wrapper-level completion with a custom fuzzy Spellbook picker:
