@@ -28,9 +28,9 @@ detect_platform() {
 
     case "$ARCH" in
         arm64|aarch64) ARCH="arm64" ;;
-        x86_64) ARCH="x86_64" ;;
         *)
-            echo "Error: Unsupported architecture: $ARCH" >&2
+            echo "Error: Spellbook supports Apple Silicon (arm64) only." >&2
+            echo "Detected architecture: $ARCH" >&2
             exit 1
             ;;
     esac

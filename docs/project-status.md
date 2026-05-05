@@ -46,7 +46,7 @@ The project is at the release hardening boundary:
 
 - Core foundation + all Phase 1 + Phase 2 + Phase 3 deliverables verified.
 - `ActivationCommand` (now lock-protected via `PosixFileLock`), `WrapperGenerator`, `StateFile`, `RunCommand`, `ListCommand`, `DoctorCommand`, `CreateCommand`, `InitCommand`, `DiffCommand`, `CleanCommand`, `CompletionCommand`, `CompleteCommand`, `PickCommand` are all wired through `SpellbookApp`.
-- GitHub Actions CI (`ci.yml`) and release (`release.yml`) workflows are in place for macOS arm64 and x86_64.
+- GitHub Actions CI (`ci.yml`) and release (`release.yml`) workflows are in place for macOS arm64 (Apple Silicon only).
 - `install.sh` curl installer handles OS/arch detection, binary download, checksum verification, and shell integration.
 - `README.md` covers install, usage, manifest format, params, switches, extends, overrides, passthrough, aliases, macOS-first support, and the Phase 3 wrapper-level TAB completion section.
 - `scripts/e2e.sh` covers activation, wrapper invocation, extends merge, builtins, filesystem cases, performance smoke, Phase 2 scenarios. Phase 3 end-to-end scenarios are covered at unit/integration level in `Phase3CompletionE2ETests` and `Phase3PickerHeadlessTests`; a dedicated shell-driven suite is a follow-up.

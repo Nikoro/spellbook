@@ -21,11 +21,9 @@ fetch_sha() {
 }
 
 arm_sha="$(fetch_sha arm64)"
-x86_sha="$(fetch_sha x86_64)"
 
 template="$(dirname "$0")/spellbook.rb"
 sed \
     -e "s/^  version .*/  version \"${version}\"/" \
     -e "s/REPLACE_WITH_ARM64_SHA256/${arm_sha}/" \
-    -e "s/REPLACE_WITH_X86_64_SHA256/${x86_sha}/" \
     "$template"

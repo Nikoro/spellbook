@@ -55,7 +55,7 @@ eval "$(spells init zsh)"
 spells init fish | source
 ```
 
-> macOS only (Apple Silicon and Intel). Linux is not yet supported.
+> macOS only (Apple Silicon). Intel and Linux are not supported.
 
 ## Quick Start
 

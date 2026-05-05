@@ -125,10 +125,10 @@ Result:
 
 - [x] Run the full unit/integration suite and all E2E scenarios.
 - [x] Measure activation of a 20-spell manifest and simple spell execution in release-mode smoke checks (latest run: activation 81ms vs enforced <100ms target; execution 507ms vs enforced <750ms three-fork budget — see [`quality-gates.md`](./quality-gates.md)).
-- [x] Build release binary and record binary size and startup time. Measured 2026-04-21 on macOS arm64 host with `swift build -c release` (x86_64 single-arch via Rosetta): binary **884 KB**, `spells --version` startup **~53 ms median** over 5 runs. Universal (arm64 + x86_64) fat binary is produced by `.github/workflows/release.yml`; fat-binary metrics recorded per release in the GitHub Release notes.
+- [x] Build release binary and record binary size and startup time. Measured 2026-04-21 on macOS arm64 host with `swift build -c release`: binary **884 KB**, `spells --version` startup **~53 ms median** over 5 runs. `release.yml` ships an arm64 binary per release (Apple Silicon only).
 - [x] Write README install, usage, manifest example, migration notes, and macOS-first support statement.
 - [x] Add `install.sh` curl installer with shell detection and interactive rc prompt.
-- [x] Add GitHub Actions release workflow for macOS arm64 and x86_64 binaries, and update the Homebrew tap if the tap is in scope for that release.
+- [x] Add GitHub Actions release workflow for macOS arm64 binary, and update the Homebrew tap if the tap is in scope for that release.
 - [x] Draft Homebrew tap/formula (done — see `homebrew/` folder and `homebrew/README.md`); `homebrew-core` is post-adoption.
 
 ## Phase 2
