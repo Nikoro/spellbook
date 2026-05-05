@@ -1,0 +1,144 @@
+/* Map Starlight tokens onto the Spellbook brand.
+   Docs support both dark (matches landing) and light theme. */
+:root {
+  --sl-font: var(--sb-font-ui);
+  --sl-font-mono: var(--sb-font-mono);
+}
+
+/* Brand accent — purple primary, shared by both themes. */
+:root,
+:root[data-theme='dark'],
+:root[data-theme='light'] {
+  --sl-color-accent: #9b5cdc;
+  /* Wider main content so long code lines (curl + URL) fit without scroll. */
+  --sl-content-width: 60rem;
+}
+
+/* Dark theme — mirrors landing palette in src/pages/index.astro. */
+:root,
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #2a1a4a;
+  --sl-color-accent-high: #b794e6;
+
+  --sl-color-white: #f5f5f7;
+  --sl-color-gray-1: #e8e9ee;
+  --sl-color-gray-2: #c4c6cf;
+  --sl-color-gray-3: #a8acba;
+  --sl-color-gray-4: #6c7080;
+  --sl-color-gray-5: #3a3d4a;
+  --sl-color-gray-6: #1a1d27;
+  --sl-color-gray-7: #15171f;
+  --sl-color-black: #0e1015;
+
+  --sl-color-bg: #0e1015;
+  --sl-color-bg-nav: #0e1015;
+  --sl-color-bg-sidebar: #0e1015;
+  --sl-color-bg-inline-code: rgba(0, 0, 0, 0.3);
+  --sl-color-bg-accent: #9b5cdc;
+
+  --sl-color-text: #e8e9ee;
+  --sl-color-text-accent: #b794e6;
+  --sl-color-text-invert: #0e1015;
+
+  --sl-color-hairline: rgba(232, 233, 238, 0.1);
+  --sl-color-hairline-light: rgba(232, 233, 238, 0.06);
+  --sl-color-hairline-shade: rgba(232, 233, 238, 0.1);
+
+  --sb-code-bg: rgba(0, 0, 0, 0.4);
+  --sb-code-border: rgba(255, 255, 255, 0.06);
+  --sb-inline-code-bg: rgba(0, 0, 0, 0.3);
+  --sb-header-bg: rgba(14, 16, 21, 0.85);
+  --sb-sidebar-active-bg: rgba(155, 92, 220, 0.14);
+}
+
+/* Light theme — neutral off-white with the same purple accent. */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --sl-color-accent-low: #ede4fb;
+  --sl-color-accent-high: #6b39ad;
+
+  --sl-color-white: #0e1015;
+  --sl-color-gray-1: #1a1d27;
+  --sl-color-gray-2: #3a3d4a;
+  --sl-color-gray-3: #5a5e6c;
+  --sl-color-gray-4: #8b8f9e;
+  --sl-color-gray-5: #c4c6cf;
+  --sl-color-gray-6: #e8e9ee;
+  --sl-color-gray-7: #f1f2f5;
+  --sl-color-black: #ffffff;
+
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #fafafb;
+  --sl-color-bg-inline-code: rgba(155, 92, 220, 0.08);
+  --sl-color-bg-accent: #9b5cdc;
+
+  --sl-color-text: #1a1d27;
+  --sl-color-text-accent: #6b39ad;
+  --sl-color-text-invert: #ffffff;
+
+  --sl-color-hairline: rgba(14, 16, 21, 0.1);
+  --sl-color-hairline-light: rgba(14, 16, 21, 0.06);
+  --sl-color-hairline-shade: rgba(14, 16, 21, 0.12);
+
+  --sb-code-bg: #f4f1fa;
+  --sb-code-border: rgba(14, 16, 21, 0.08);
+  --sb-inline-code-bg: rgba(155, 92, 220, 0.08);
+  --sb-header-bg: rgba(255, 255, 255, 0.85);
+  --sb-sidebar-active-bg: rgba(155, 92, 220, 0.12);
+}
+
+/* Brand-aligned link/accent treatments. */
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: var(--sl-color-accent-high);
+  text-decoration-color: color-mix(in srgb, var(--sl-color-accent) 50%, transparent);
+}
+
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+  color: var(--sl-color-accent);
+  text-decoration-color: var(--sl-color-accent);
+}
+
+/* Sidebar active item — soft purple wash, both themes. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover {
+  background-color: var(--sb-sidebar-active-bg);
+  color: var(--sl-color-text-accent);
+}
+
+/* Inline code — themed background and border. */
+.sl-markdown-content code:not(:where(pre *)):not(:where(.not-content *)) {
+  background-color: var(--sb-inline-code-bg);
+  border: 1px solid var(--sb-code-border);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.85em;
+}
+
+/* Header strip — themed translucent backdrop. */
+.page header.header {
+  background-color: var(--sb-header-bg);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+/* Override Starlight's asymmetric header grid so the search trigger sits in the
+   true center: equal-fr columns on either side push the auto-sized middle column
+   into the viewport's middle. */
+@media (min-width: 50rem) {
+  div.header {
+    grid-template-columns: 1fr auto 1fr !important;
+  }
+  div.header > .sl-flex:nth-child(2) {
+    justify-content: center;
+    width: min(22rem, 40vw);
+  }
+  div.header button[data-open-modal] {
+    width: 100%;
+  }
+  div.header > .right-group {
+    justify-content: flex-end;
+  }
+}
+

@@ -1,0 +1,2 @@
+error: 'build' has both script and switch
+tip: Use script or switch, not both

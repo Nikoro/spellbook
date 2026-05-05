@@ -1,0 +1,2 @@
+error: manifest search exceeded depth limit
+  --> /very/deep/path

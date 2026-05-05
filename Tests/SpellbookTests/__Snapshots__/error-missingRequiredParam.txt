@@ -1,0 +1,2 @@
+error: missing required param 'env' in 'deploy'
+tip: Provide --env, -e

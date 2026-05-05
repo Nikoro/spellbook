@@ -1,0 +1,2 @@
+error: alias 'cd' of 'go' is a shell builtin
+tip: Choose a different alias

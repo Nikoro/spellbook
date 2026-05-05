@@ -1,0 +1,86 @@
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - 'CHANGELOG.md'
+      - '.github/workflows/site.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - 'CHANGELOG.md'
+      - '.github/workflows/site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.x
+
+      - name: Cache Astro and Pagefind artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            website/.astro
+            website/node_modules/.astro
+            website/node_modules/.cache
+          key: astro-${{ runner.os }}-${{ hashFiles('website/bun.lockb', 'website/bun.lock') }}
+          restore-keys: |
+            astro-${{ runner.os }}-
+
+      - name: Install dependencies
+        working-directory: website
+        run: bun install --frozen-lockfile
+
+      - name: Build site
+        working-directory: website
+        run: bun run build
+
+      - name: Lychee link checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --base 'https://nikoro.github.io/spellbook'
+            --exclude-path '_astro'
+            --exclude-loopback
+            --exclude '^https?://(github\.com|nikoro\.github\.io|fonts\.googleapis\.com|fonts\.gstatic\.com)'
+            'website/dist/**/*.html'
+          fail: true
+
+      - name: Upload Pages artifact
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/dist
+
+  deploy:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

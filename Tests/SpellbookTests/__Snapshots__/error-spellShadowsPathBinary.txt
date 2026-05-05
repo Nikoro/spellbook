@@ -1,0 +1,2 @@
+error: 'git' shadows a PATH binary
+tip: Add `override: true` or choose a different name

@@ -1,0 +1,2 @@
+error: mixed manifest mode
+tip: Move all spells under `spells:`, or remove it

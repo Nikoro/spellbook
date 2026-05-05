@@ -1,0 +1,2 @@
+error: mixed param modes in 'deploy'
+tip: Use one param style consistently

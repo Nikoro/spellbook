@@ -1,0 +1,19 @@
+.DS_Store
+
+# SwiftPM / Xcode
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+
+# Local environment
+.env
+.env.*
+
+# Local Claude Code runtime state
+.claude/scheduled_tasks.lock
+
+
+# added by ralph
+.ralph/

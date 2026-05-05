@@ -1,0 +1,2 @@
+error: 'deploy' requires a switch option
+tip: Available options: staging, production

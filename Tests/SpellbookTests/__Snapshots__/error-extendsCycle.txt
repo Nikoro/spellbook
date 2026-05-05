@@ -1,0 +1,2 @@
+error: extends cycle detected
+  --> /a -> /b -> /a

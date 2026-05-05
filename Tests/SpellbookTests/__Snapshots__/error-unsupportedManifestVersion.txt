@@ -1,0 +1,2 @@
+error: unsupported manifest version '2'
+tip: Use version: 1

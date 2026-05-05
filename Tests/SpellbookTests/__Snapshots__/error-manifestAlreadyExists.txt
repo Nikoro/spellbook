@@ -1,0 +1,2 @@
+error: manifest already exists
+  --> /project/spells.yaml

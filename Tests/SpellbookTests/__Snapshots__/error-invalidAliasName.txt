@@ -1,0 +1,2 @@
+error: invalid alias '123!' in 'test'
+tip: Start with a letter; use letters, digits, hyphens, or underscores

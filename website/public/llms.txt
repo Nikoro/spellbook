@@ -1,0 +1,10 @@
+# Spellbook Documentation
+
+> Project-specific shell commands, zero config.
+
+## Docs
+
+- [Manifest](https://nikoro.github.io/spellbook/docs/manifest.md): Complete syntax reference for spells.yaml — spells, params, switches, extends, placeholders, overrides, aliases, and the locked YAML subset.
+- [CLI](https://nikoro.github.io/spellbook/docs/cli.md): Reference for every Spellbook subcommand — synopsis, examples, and flags for activate, list, diff, doctor, clean, create, init, completion, and help.
+- [Examples](https://nikoro.github.io/spellbook/docs/examples.md): Real-world spells.yaml examples for Swift, Node.js, Python, static sites, Docker, database migrations, monorepos with extends, and home manifests.
+- [Troubleshooting](https://nikoro.github.io/spellbook/docs/troubleshooting.md): Diagnose Spellbook problems — read spells doctor output, fix common errors (missing parent, name shadowing, override required), and recover from wrapper conflicts.

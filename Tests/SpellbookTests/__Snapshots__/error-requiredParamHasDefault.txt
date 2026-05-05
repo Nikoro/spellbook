@@ -1,0 +1,2 @@
+error: required param 'target' in 'build' has a default
+tip: Remove the default or make the param optional

@@ -1,0 +1,33 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import MarkdownActions from './MarkdownActions.astro';
+
+const route = (Astro.locals as any).starlightRoute;
+const slug: string = route?.entry?.slug ?? route?.entry?.id ?? '';
+const isDocsPage = slug.startsWith('docs/');
+---
+
+{
+  isDocsPage ? (
+    <div class="page-title-row">
+      <Default><slot /></Default>
+      <MarkdownActions slug={slug} />
+    </div>
+  ) : (
+    <Default><slot /></Default>
+  )
+}
+
+<style>
+  .page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  /* Cancel the default h1 top margin since the row supplies its own spacing. */
+  .page-title-row :global(h1) {
+    margin-top: 0;
+  }
+</style>

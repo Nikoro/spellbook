@@ -1,0 +1,2 @@
+error: equals form is not supported
+tip: Use separate tokens: --env <env>

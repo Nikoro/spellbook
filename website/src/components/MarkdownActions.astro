@@ -1,0 +1,209 @@
+---
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const mdHref = `${base}/${slug}.md`;
+---
+
+<div class="md-actions" data-md-href={mdHref}>
+  <a
+    class="md-actions__btn md-actions__btn--start"
+    href={mdHref}
+    target="_blank"
+    rel="noopener"
+    aria-label="View as Markdown"
+    title="View as Markdown"
+  >
+    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path
+        d="M1.5 8c1.6-3 4-4.5 6.5-4.5S13.4 5 15 8c-1.6 3-4 4.5-6.5 4.5S3.1 11 1.5 8Z"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linejoin="round"
+      />
+      <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.4" />
+    </svg>
+  </a>
+  <button
+    type="button"
+    class="md-actions__copy"
+    data-state="idle"
+    aria-label="Copy as Markdown"
+    title="Copy as Markdown"
+  >
+    <span class="md-actions__label">Markdown</span>
+    <span class="md-actions__btn md-actions__btn--end">
+      <svg class="md-actions__icon-copy" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <rect
+          x="5"
+          y="5"
+          width="8.5"
+          height="8.5"
+          rx="1.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        />
+        <path
+          d="M10.5 5V3.5A1 1 0 0 0 9.5 2.5h-6A1 1 0 0 0 2.5 3.5v6A1 1 0 0 0 3.5 10.5H5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <svg class="md-actions__icon-check" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <path
+          d="M3 8.5 6.5 12 13 4.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+  </button>
+</div>
+
+<style>
+  .md-actions {
+    display: inline-flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+  }
+
+  .md-actions__btn {
+    appearance: none;
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-gray-3);
+    padding: 0;
+    cursor: pointer;
+    transition: color 120ms ease, background 120ms ease;
+  }
+
+  .md-actions__btn:hover,
+  .md-actions__btn:focus-visible {
+    color: var(--sl-color-text-accent);
+    background: rgba(155, 92, 220, 0.12);
+  }
+
+  .md-actions__btn:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: -2px;
+  }
+
+  .md-actions__copy {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: stretch;
+    cursor: pointer;
+    color: var(--sl-color-gray-3);
+    border-left: 1px solid var(--sl-color-hairline);
+    transition: color 120ms ease, background 120ms ease;
+  }
+
+  .md-actions__copy:hover,
+  .md-actions__copy:focus-visible {
+    color: var(--sl-color-text-accent);
+    background: rgba(155, 92, 220, 0.12);
+  }
+
+  .md-actions__copy:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: -2px;
+  }
+
+  .md-actions__label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.6rem;
+    font-family: var(--sb-font-mono, ui-monospace, monospace);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: inherit;
+    border-right: 1px solid var(--sl-color-hairline);
+    user-select: none;
+  }
+
+  .md-actions__copy .md-actions__btn--end {
+    color: inherit;
+    background: transparent;
+  }
+
+  .md-actions__copy .md-actions__icon-check {
+    display: none;
+  }
+  .md-actions__copy[data-state='done'] {
+    color: var(--sb-mint, #3dd9a1);
+    background: rgba(61, 217, 161, 0.12);
+  }
+  .md-actions__copy[data-state='done'] .md-actions__icon-copy {
+    display: none;
+  }
+  .md-actions__copy[data-state='done'] .md-actions__icon-check {
+    display: block;
+  }
+  .md-actions__copy[data-state='error'] {
+    color: #e89494;
+    background: rgba(217, 124, 124, 0.12);
+  }
+</style>
+
+<script>
+  function wireCopyButtons() {
+    const wrappers = document.querySelectorAll<HTMLDivElement>('.md-actions');
+    wrappers.forEach((wrapper) => {
+      const btn = wrapper.querySelector<HTMLButtonElement>('.md-actions__copy');
+      const href = wrapper.dataset.mdHref;
+      if (!btn || !href) return;
+
+      btn.addEventListener('click', async () => {
+        try {
+          const response = await fetch(href);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const text = await response.text();
+          if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+          await navigator.clipboard.writeText(text);
+          btn.dataset.state = 'done';
+          btn.setAttribute('title', 'Copied!');
+          window.setTimeout(() => {
+            btn.dataset.state = 'idle';
+            btn.setAttribute('title', 'Copy as Markdown');
+          }, 2000);
+        } catch {
+          btn.dataset.state = 'error';
+          btn.setAttribute('title', 'Copy failed');
+          window.setTimeout(() => {
+            btn.dataset.state = 'idle';
+            btn.setAttribute('title', 'Copy as Markdown');
+          }, 2500);
+        }
+      });
+    });
+  }
+
+  wireCopyButtons();
+  document.addEventListener('astro:page-load', wireCopyButtons);
+</script>

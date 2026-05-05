@@ -1,0 +1,1918 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const docsHref = `${base}/docs/getting-started`;
+const repoHref = 'https://github.com/Nikoro/spellbook';
+const ogImage = `${base}/og.png`;
+const canonical = `https://nikoro.github.io${base}/`;
+const title = 'Spellbook — Cast commands like spells. No prefix.';
+const description =
+  'Spellbook is a macOS-first native Swift CLI that turns project commands into real shell commands — no `make`, `just`, or `npm run` prefix. Type-safe params, switches, inheritance, doctor diagnostics, zero runtime dependencies.';
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={`${base}/favicon.ico`} />
+    <link rel="apple-touch-icon" href={`${base}/icon.png`} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`https://nikoro.github.io${base}/og.png`} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`https://nikoro.github.io${base}/og.png`} />
+
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a href={base + '/'} class="brand" aria-label="Spellbook home">
+        <picture>
+          <source srcset={`${base}/icon.webp`} type="image/webp" />
+          <img class="brand__icon" src={`${base}/icon.png`} alt="" width="32" height="32" />
+        </picture>
+        <span class="brand__name">Spellbook</span>
+      </a>
+      <nav aria-label="Primary">
+        <a href={docsHref}>Docs</a>
+        <a href={`${base}/changelog`}>Changelog</a>
+        <a href={repoHref} rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero__text">
+          <picture class="hero__wordmark">
+            <source srcset={`${base}/wordmark.webp`} type="image/webp" />
+            <img
+              src={`${base}/wordmark.png`}
+              alt="Spellbook"
+              width="480"
+              height="200"
+            />
+          </picture>
+          <p class="hero__tagline">
+            Cast commands like spells.<br />
+            <span class="hero__tagline-accent">No prefix:</span>
+          </p>
+          <div class="hero__no-prefix" aria-label="Comparison with other task runners">
+            <ul class="hero__strikes">
+              <li><span class="hero__icon" aria-hidden="true">❌</span>make hello</li>
+              <li><span class="hero__icon" aria-hidden="true">❌</span>just hello</li>
+              <li><span class="hero__icon" aria-hidden="true">❌</span>npm run hello</li>
+              <li><span class="hero__icon" aria-hidden="true">❌</span>task hello</li>
+              <li><span class="hero__icon" aria-hidden="true">❌</span>./scripts/hello.sh</li>
+              <li class="hero__win"><span class="hero__icon" aria-hidden="true">✅</span><code>hello</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="hero__media" role="img" aria-label="Spellbook demo showing a spells.yaml manifest and terminal output">
+          <div class="demo-window" data-demo-window data-demo-step="1" aria-hidden="true">
+            <div class="demo-window__bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="demo-pane demo-pane--editor">
+              <div class="demo-pane__title">spells.yaml</div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="1">
+                <pre><code><span class="key">hello</span>: echo "Hello World"</code></pre>
+              </div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="2">
+                <pre><code><span class="key">hello</span>:
+  <span class="key">script</span>: echo "Hello &#123;&#123;name&#125;&#125;"
+  <span class="key">params</span>:
+    <span class="key">required</span>:
+      <span class="key">name</span>:</code></pre>
+              </div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="3">
+                <pre><code><span class="key">hello</span>:
+  <span class="key">script</span>: echo "Hello &#123;&#123;name&#125;&#125;"
+  <span class="key">params</span>:
+    <span class="key">required</span>:
+      <span class="key">name</span>:
+        <span class="key">flags</span>: -n, --name</code></pre>
+              </div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="4">
+                <pre><code><span class="key">hello</span>:
+  <span class="key">script</span>: echo "Hello &#123;&#123;name&#125;&#125;"
+  <span class="key">params</span>:
+    <span class="key">optional</span>:
+      <span class="key">name</span>:
+        <span class="key">flags</span>: -n, --name
+        <span class="key">default</span>: John</code></pre>
+              </div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="5">
+                <pre><code><span class="key">hello</span>:
+  <span class="key">script</span>: echo "Hello &#123;&#123;name&#125;&#125;"
+  <span class="key">params</span>:
+    <span class="key">required</span>:
+      <span class="key">name</span>:
+        <span class="key">values</span>: [Bob, Ann, John]</code></pre>
+              </div>
+              <div class="demo-code demo-code--yaml" data-yaml-step="6">
+                <pre><code><span class="key">hello</span>: <span class="comment">## Greet someone by name</span>
+  <span class="key">script</span>: echo "Hello &#123;&#123;name&#125;&#125;"
+  <span class="key">params</span>:
+    <span class="key">optional</span>:
+      <span class="key">name</span>: <span class="comment">## Person to greet</span>
+        <span class="key">flags</span>: -n, --name
+        <span class="key">default</span>: World</code></pre>
+              </div>
+            </div>
+            <div class="demo-pane demo-pane--terminal">
+              <div class="demo-pane__title">terminal</div>
+              <div class="demo-code demo-code--terminal">
+                <pre><code data-demo-terminal><span class="prompt">$</span> <span class="typed">hello</span><span class="cursor"></span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="install" aria-label="Install Spellbook">
+        <div class="install__cta">
+          <a class="btn btn--primary" href={docsHref}>
+            <span class="btn__label">Get Started</span>
+          </a>
+        </div>
+        <div class="install-bar" data-method="curl">
+          <button
+            type="button"
+            class="install-bar__trigger"
+            id="install-trigger"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls="install-menu"
+          >
+            <span class="install-bar__method-label" data-install-label>curl</span>
+            <svg class="install-bar__chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="install-bar__cmd-btn" id="install-copy" aria-label="Copy install command">
+            <code class="install-bar__cmd" id="install-cmd" data-install-cmd>curl -fsSL https://raw.githubusercontent.com/Nikoro/spellbook/main/install.sh | sh</code>
+            <span class="install-bar__hint" data-install-bar-hint hidden>The picker, atomic activation, and shell integration — wired up step-by-step below ↓</span>
+            <span class="install-bar__copy-icon" data-copy-icon aria-hidden="true">
+              <svg class="icon-copy" width="22" height="22" viewBox="0 0 18 18">
+                <rect x="4" y="4" width="9" height="9" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="6.5" y="6.5" width="9" height="9" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <svg class="icon-check" width="22" height="22" viewBox="0 0 18 18">
+                <path d="M3.5 9.5l3.8 3.8L14.5 5.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+
+          <ul
+            class="install-bar__menu"
+            id="install-menu"
+            role="listbox"
+            aria-labelledby="install-trigger"
+            hidden
+          >
+            <li role="option" data-method="curl" aria-selected="true">
+              <span class="install-bar__menu-key">curl</span>
+              <span class="install-bar__menu-desc">macOS · one-liner installer with shell-integration prompt</span>
+            </li>
+            <li role="option" data-method="brew" aria-selected="false">
+              <span class="install-bar__menu-key">Homebrew</span>
+              <span class="install-bar__menu-desc">macOS · <code>brew install nikoro/tap/spellbook</code></span>
+            </li>
+            <li role="option" data-method="manual" aria-selected="false">
+              <span class="install-bar__menu-key">Manual</span>
+              <span class="install-bar__menu-desc">Step-by-step download &amp; wiring</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Hint shown for curl/brew (default-visible). Text is swapped per method by wireInstallBar(). -->
+        <p class="install__hint" data-install-hint>
+          macOS only. The curl installer auto-detects your shell (zsh / bash / fish), checks <code>~/.local/bin</code> on <code>$PATH</code>, and prompts before adding the integration to your rc file.
+        </p>
+
+        <!-- Step-by-step manual instructions (toggle from dropdown) -->
+        <div class="install__manual" data-install-manual hidden>
+          <ol class="manual-steps">
+            <li>
+              <h4>1 · Download the binary</h4>
+              <p>Pick the asset that matches your CPU (<code>arm64</code> for Apple Silicon, <code>x86_64</code> for Intel) from <a href="https://github.com/Nikoro/spellbook/releases/latest" rel="noopener">the latest GitHub Release</a>.</p>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`ARCH=$(uname -m)   # arm64 or x86_64
+curl -fsSL -o /tmp/spells \\
+  https://github.com/Nikoro/spellbook/releases/latest/download/spells-macos-$ARCH`}</code></pre>
+              </div>
+            </li>
+
+            <li>
+              <h4>2 · Verify the checksum</h4>
+              <p>Each release ships a <code>.sha256</code> sidecar. Match it before running anything.</p>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`curl -fsSL -o /tmp/spells.sha256 \\
+  https://github.com/Nikoro/spellbook/releases/latest/download/spells-macos-$ARCH.sha256
+shasum -a 256 -c <(awk -v f=/tmp/spells '{print $1"  "f}' /tmp/spells.sha256)`}</code></pre>
+              </div>
+            </li>
+
+            <li>
+              <h4>3 · Install and make executable</h4>
+              <p>Drop the binary somewhere on your <code>$PATH</code>. The curl installer uses <code>~/.local/bin</code>.</p>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`mkdir -p ~/.local/bin
+mv /tmp/spells ~/.local/bin/spells
+chmod +x ~/.local/bin/spells`}</code></pre>
+              </div>
+            </li>
+
+            <li>
+              <h4>4 · Add <code>~/.local/bin</code> to <code>$PATH</code> (if missing)</h4>
+              <p>Skip if it's already there. <code>echo $PATH | tr ':' '\n' | grep .local/bin</code> to check.</p>
+              <div class="snippet">
+                <span class="snippet__label">~/.zshrc or ~/.bashrc</span>
+                <pre><code>export PATH="$HOME/.local/bin:$PATH"</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">~/.config/fish/config.fish</span>
+                <pre><code>set -gx PATH $HOME/.local/bin $PATH</code></pre>
+              </div>
+            </li>
+
+            <li>
+              <h4>5 · Wire up shell integration (TAB completion + wrapper PATH)</h4>
+              <p>This is what gives you the picker on TAB and adds <code>~/.spellbook/bin</code> to <code>$PATH</code>.</p>
+              <div class="snippet">
+                <span class="snippet__label">~/.zshrc or ~/.bashrc</span>
+                <pre><code>{`# spellbook
+eval "$(spells init zsh)"   # or bash`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">~/.config/fish/config.fish</span>
+                <pre><code>spells init fish | source</code></pre>
+              </div>
+            </li>
+
+            <li>
+              <h4>6 · Verify</h4>
+              <p>Open a new shell, then check the install + path integration:</p>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`spells --version
+spells doctor   # checks PATH, manifest, wrapper state, shell integration`}</code></pre>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="comparison" aria-label="Comparison">
+        <h2>How Spellbook fixes what you already use</h2>
+        <div class="compare-stack">
+          <article class="compare-row">
+            <div class="compare-side compare-side--bad">
+              <h3>Shell alias</h3>
+              <div class="snippet">
+                <span class="snippet__label">~/.zshrc</span>
+                <pre><code>alias deploy='./scripts/deploy.sh staging'</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>$ deploy
+# works on your machine only</code></pre>
+              </div>
+              <ul class="cons">
+                <li><strong>Not in the repo.</strong><span>Lives in <code>~/.zshrc</code>, teammates and CI never see it.</span></li>
+                <li><strong>No params, no validation.</strong><span>Pass garbage, the script gets garbage.</span></li>
+                <li><strong>Breaks on branches.</strong><span>Need <code>staging</code> vs <code>production</code>? Welcome to <code>deploy-staging</code>, <code>deploy-prod</code>…</span></li>
+              </ul>
+            </div>
+            <div class="compare-side compare-side--good">
+              <h3>Spellbook</h3>
+              <div class="snippet">
+                <span class="snippet__label">spells.yaml</span>
+                <pre><code>{`deploy:
+  switch:
+    staging:    ./deploy.sh staging
+    production: ./deploy.sh production
+  default: staging`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`$ deploy             # default → staging
+$ deploy production  # explicit branch
+$ spells list        # discoverable`}</code></pre>
+              </div>
+              <ul class="pros">
+                <li><strong>Lives with the repo.</strong><span>Committed in <code>spells.yaml</code> — works for every teammate, CI, every machine.</span></li>
+                <li><strong>Branches built-in.</strong><span><code>switch:</code> with picker, defaults, and TAB completion — no <code>deploy-*</code> proliferation.</span></li>
+                <li><strong>Discoverable.</strong><span><code>spells list</code> shows everything. <code>spells help deploy</code> shows args.</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="compare-row">
+            <div class="compare-side compare-side--bad">
+              <h3>Makefile</h3>
+              <div class="snippet">
+                <span class="snippet__label">Makefile</span>
+                <pre><code>{`deploy:
+\t./scripts/deploy.sh staging`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>$ make deploy ENV=staging</code></pre>
+              </div>
+              <ul class="cons">
+                <li><strong>Prefix tax.</strong><span>Always <code>make deploy</code> — five extra keystrokes, every time.</span></li>
+                <li><strong>Wrong tool for shell scripts.</strong><span>Tabs-vs-spaces, <code>.PHONY</code> ceremony, recursive-make footguns.</span></li>
+                <li><strong>Stringly-typed.</strong><span>No types, no enums, no named flags — just <code>VAR=value</code>.</span></li>
+              </ul>
+            </div>
+            <div class="compare-side compare-side--good">
+              <h3>Spellbook</h3>
+              <div class="snippet">
+                <span class="snippet__label">spells.yaml</span>
+                <pre><code>{`deploy:
+  params:
+    env:
+      values: [staging, production]
+  script: ./deploy.sh {{env}}`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>{`$ deploy staging   # validated enum
+$ deploy prod      # error: invalid value`}</code></pre>
+              </div>
+              <ul class="pros">
+                <li><strong>No prefix.</strong><span>Just <code>deploy</code>. The wrapper <em>is</em> the command.</span></li>
+                <li><strong>Plain shell, plain YAML.</strong><span>Your script is bash. The manifest is one tiny file. No syntax to fight.</span></li>
+                <li><strong>Type-safe.</strong><span>Enum, <code>int</code>, <code>bool</code> params validated before the script runs — bad input fails fast with a structured error.</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="compare-row">
+            <div class="compare-side compare-side--bad">
+              <h3>npm script</h3>
+              <div class="snippet">
+                <span class="snippet__label">package.json</span>
+                <pre><code>{`"scripts": {
+  "deploy": "./scripts/deploy.sh staging"
+}`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>$ npm run deploy</code></pre>
+              </div>
+              <ul class="cons">
+                <li><strong>Drags Node into everything.</strong><span>Swift, Go, Rust, Python projects don't want <code>node_modules</code> for shell scripts.</span></li>
+                <li><strong>Prefix tax, again.</strong><span><code>npm run deploy</code>, <code>bun run</code>, <code>pnpm run</code> — same five-key tax.</span></li>
+                <li><strong>Quoting hell.</strong><span>Single-line JSON strings don't survive multi-line shell scripts cleanly.</span></li>
+              </ul>
+            </div>
+            <div class="compare-side compare-side--good">
+              <h3>Spellbook</h3>
+              <div class="snippet">
+                <span class="snippet__label">spells.yaml — works in any project</span>
+                <pre><code>{`deploy:
+  script: |
+    set -e
+    echo "deploying…"
+    ./deploy.sh staging`}</code></pre>
+              </div>
+              <div class="snippet">
+                <span class="snippet__label">terminal</span>
+                <pre><code>$ deploy
+# one binary, zero deps</code></pre>
+              </div>
+              <ul class="pros">
+                <li><strong>One native binary.</strong><span>Single Swift binary on <code>$PATH</code>. No runtime, no <code>node_modules</code>, no version managers.</span></li>
+                <li><strong>No prefix.</strong><span>Just <code>deploy</code>. Same UX in Swift, Go, Rust, or a JS repo.</span></li>
+                <li><strong>Multi-line scripts, no quoting.</strong><span>YAML block scalars handle <code>set -e</code>, pipes, heredocs — write shell like shell.</span></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="why" aria-label="Why Spellbook">
+        <h2>What makes Spellbook different</h2>
+        <p class="why__lede">Six things you only get because Spellbook is a real CLI, not a YAML interpreter glued onto a runner.</p>
+
+        <div class="why-grid">
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">01</span>
+              <h3>Fuzzy TAB completion, picker-driven</h3>
+            </div>
+            <p>Every wrapper gets dynamic TAB completion driven by Spellbook's own <code>/dev/tty</code> picker — fuzzy subsequence matching with highlights, ranked exact → prefix → word-boundary → length, single-digit-millisecond cache hits.</p>
+            <div class="snippet">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ deploy <TAB>          # picker: staging, production, dev
+$ deploy st<TAB>        # auto-fills "staging"
+$ deploy prd<TAB>       # fuzzy matches "production"
+$ deploy --env <TAB>    # second-level enum picker`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">02</span>
+              <h3>Shell-escaped placeholders, by default</h3>
+            </div>
+            <p><code>{'{{name}}'}</code> resolves to a single shell-escaped token. No opt-in, no <code>quote()</code> helpers, no shell-injection footguns when a teammate copy-pastes a script.</p>
+            <div class="snippet">
+              <span class="snippet__label">spells.yaml</span>
+              <pre><code>{`deploy:
+  params:
+    env:
+    message:
+  script: ./deploy {{env}} -m {{message}}`}</code></pre>
+            </div>
+            <div class="snippet">
+              <span class="snippet__label">terminal — expanded safely</span>
+              <pre><code>{`$ deploy "prod us-east-1" "it's $HOME; rm -rf /"
+./deploy 'prod us-east-1' -m 'it'\\''s $HOME; rm -rf /'`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">03</span>
+              <h3>Override existing commands safely</h3>
+            </div>
+            <p>Mark a spell <code>override: true</code> and use <code>{'{{name}}'}</code> to call the real binary. Spellbook resolves it to the next <code>$PATH</code> match outside its own <code>bin/</code> — wrappers can't recurse into themselves.</p>
+            <div class="snippet">
+              <span class="snippet__label">spells.yaml</span>
+              <pre><code>{`cat:
+  override: true
+  script: "{{cat}} -n ...args"`}</code></pre>
+            </div>
+            <div class="snippet">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ cat README.md
+# runs /usr/bin/cat -n README.md`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">04</span>
+              <h3>Rust/Elm-style structured errors</h3>
+            </div>
+            <p>Every error has a header, a caret pointing at the problem, body, and a fix tip. Every variant is snapshot-tested. No more <code>bad substitution</code> stack traces.</p>
+            <div class="snippet snippet--err">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ spells
+error: 'git' shadows a PATH binary
+   --> spells.yaml:3
+   |
+ 3 |   git:
+   |   ^^^
+   = note: /usr/bin/git already exists
+   = help: add \`override: true\` to confirm`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">05</span>
+              <h3>Atomic activation, never half-broken</h3>
+            </div>
+            <p>Activation is a transaction: validate the full merged manifest, write wrapper temp files, atomically rename, then atomically update state. A bad edit can never strand you with half a working <code>$PATH</code>.</p>
+            <div class="snippet">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ spells
+  ✓ validate spells.yaml + extends chain
+  ✓ write 12 wrappers (temp + atomic rename)
+  ✓ update state snapshot
+
+  → activated 12 spells from /Users/me/proj`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-card__head">
+              <span class="why-card__num">06</span>
+              <h3>Silent mode that's actually smart</h3>
+            </div>
+            <p>Per-spell <code>silent: true</code> shows a spinner in TTY, buffers stdout/stderr, discards on success, flushes on failure. Auto-degrades in CI to plain streaming — no spinner control codes in your logs.</p>
+            <div class="snippet">
+              <span class="snippet__label">spells.yaml</span>
+              <pre><code>{`lint:
+  silent: true
+  script: bun run lint`}</code></pre>
+            </div>
+            <div class="snippet">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ lint
+⠇ lint                  # spinner while running
+✓ lint                  # success → no output
+
+$ lint
+✗ lint (exit 1)         # failure → captured output flushed
+[eslint] 3 problems (3 errors, 0 warnings)`}</code></pre>
+            </div>
+          </article>
+
+          <article class="why-card why-card--wide">
+            <div class="why-card__head">
+              <span class="why-card__num">07</span>
+              <h3>Doctor diagnostics, when something breaks</h3>
+            </div>
+            <p><code>spells doctor</code> runs 10 distinct checks — <code>$PATH</code> integration, manifest discovery, extends cycles, wrapper drift, shadowing, placeholder/param consistency, override usage, shell init, state versioning. Plus a versioned binary manifest cache that keeps TAB completion sub-perceptible, <code>extends:</code> inheritance with closer-manifest-wins overrides, and one native Swift binary on disk — no Node, no Python, no <code>node_modules</code>.</p>
+            <div class="snippet">
+              <span class="snippet__label">terminal</span>
+              <pre><code>{`$ spells doctor
+  ✓ manifest      spells.yaml + 1 parent (extends chain ok)
+  ✓ PATH          ~/.local/bin and ~/.spellbook/bin both reachable
+  ✓ shell init    zsh integration loaded (TAB completion live)
+  ✓ wrappers      12 wrappers match manifest, 0 drift
+  ✓ shadowing     no spell shadows a $PATH binary without override
+  ✓ placeholders  every {{name}} resolves to a declared param
+  ✓ state         snapshot version 3 (current)
+  ⚠ stale cache   1 orphan from /Users/me/old-proj (run \`spells clean --orphans\`)
+
+  → 0 errors, 1 warning`}</code></pre>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="examples" aria-label="Examples preview">
+        <h2>Examples</h2>
+        <div class="example-grid">
+          <article>
+            <h3>Swift project</h3>
+            <pre><code>{`build: swift build -c release
+test:
+  aliases: [t]
+  script: swift test ...args`}</code></pre>
+            <a href={`${base}/docs/examples`}>See full example →</a>
+          </article>
+          <article>
+            <h3>Switches</h3>
+            <pre><code>{`deploy:
+  switch:
+    staging:    ./deploy.sh staging
+    production: ./deploy.sh production
+  default: staging`}</code></pre>
+            <a href={`${base}/docs/examples`}>See full example →</a>
+          </article>
+          <article>
+            <h3>Override</h3>
+            <pre><code>{`cat:
+  override: true
+  script: "{{cat}} -n ...args"`}</code></pre>
+            <a href={`${base}/docs/examples`}>See full example →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta" aria-label="Call to action">
+        <h2>Ready?</h2>
+        <p>Spellbook installs in seconds. The whole CLI is one binary.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href={docsHref}><span class="btn__label">Read the docs →</span></a>
+          <a class="btn btn--ghost" href={repoHref} rel="noopener">Star on GitHub</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p class="copyright">© {new Date().getFullYear()} Dominik Krajcer</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href={`${base}/changelog`}>Changelog</a>
+        <a href={repoHref} rel="noopener">GitHub</a>
+        <a href="https://github.com/Nikoro/spellbook/releases" rel="noopener">Releases</a>
+      </nav>
+    </footer>
+
+    <script>
+      function wireCopy() {
+        document.querySelectorAll<HTMLButtonElement>('button[data-target]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const id = btn.dataset.target;
+            if (!id) return;
+            const target = document.getElementById(id);
+            const text = target?.textContent ?? '';
+            try {
+              await navigator.clipboard.writeText(text.trim());
+              const original = btn.textContent;
+              btn.textContent = 'Copied';
+              setTimeout(() => { btn.textContent = original; }, 1600);
+            } catch {
+              btn.textContent = 'Copy failed';
+            }
+          });
+        });
+      }
+      function wireInstallBar() {
+        const bar = document.querySelector<HTMLDivElement>('.install-bar');
+        const trigger = document.getElementById('install-trigger');
+        const menu = document.getElementById('install-menu');
+        const copyBtn = document.getElementById('install-copy') as HTMLButtonElement | null;
+        const cmd = document.querySelector<HTMLElement>('[data-install-cmd]');
+        const label = document.querySelector<HTMLElement>('[data-install-label]');
+        const barHint = document.querySelector<HTMLElement>('[data-install-bar-hint]');
+        const hint = document.querySelector<HTMLElement>('[data-install-hint]');
+        const manual = document.querySelector<HTMLElement>('[data-install-manual]');
+        if (!bar || !trigger || !menu || !copyBtn || !cmd || !label) return;
+
+        const COMMANDS: Record<string, { label: string; cmd: string; hint?: string; pageHint?: string }> = {
+          curl: {
+            label: 'curl',
+            cmd: 'curl -fsSL https://raw.githubusercontent.com/Nikoro/spellbook/main/install.sh | sh',
+            pageHint: 'macOS only. The curl installer auto-detects your shell (zsh / bash / fish), checks <code>~/.local/bin</code> on <code>$PATH</code>, and prompts before adding the integration to your rc file.',
+          },
+          brew: {
+            label: 'Homebrew',
+            cmd: 'brew install nikoro/tap/spellbook',
+            pageHint: 'macOS only. Installs the <code>spells</code> binary into Homebrew\'s prefix. Brew can\'t edit your rc file, so finish setup by adding <code>eval "$(spells init zsh)"</code> (or <code>bash</code> / <code>fish</code>) to your shell config.',
+          },
+          manual: {
+            label: 'Manual',
+            cmd: '',
+            hint: 'Same steps the curl installer runs — just spelled out below ↓',
+          },
+        };
+
+        const close = () => {
+          menu.setAttribute('hidden', '');
+          trigger.setAttribute('aria-expanded', 'false');
+        };
+        const open = () => {
+          menu.removeAttribute('hidden');
+          trigger.setAttribute('aria-expanded', 'true');
+        };
+
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (menu.hasAttribute('hidden')) open();
+          else close();
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!bar.contains(e.target as Node)) close();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') close();
+        });
+
+        const apply = (method: string) => {
+          if (!COMMANDS[method]) return;
+          label.textContent = COMMANDS[method].label;
+          cmd.textContent = COMMANDS[method].cmd;
+          bar.dataset.method = method;
+
+          const isManual = method === 'manual';
+          if (hint) {
+            hint.toggleAttribute('hidden', isManual);
+            const pageHint = COMMANDS[method].pageHint;
+            if (pageHint) hint.innerHTML = pageHint;
+          }
+          if (manual) manual.toggleAttribute('hidden', !isManual);
+          if (barHint) {
+            if (isManual && COMMANDS[method].hint) {
+              barHint.textContent = COMMANDS[method].hint!;
+              barHint.removeAttribute('hidden');
+            } else {
+              barHint.setAttribute('hidden', '');
+            }
+          }
+          // Hide the actual command + copy icon when in manual
+          cmd.toggleAttribute('hidden', isManual);
+          const icon = copyBtn.querySelector<HTMLElement>('[data-copy-icon]');
+          if (icon) icon.toggleAttribute('hidden', isManual);
+          // The whole bar is no longer a copy button in manual mode
+          copyBtn.disabled = isManual;
+        };
+
+        menu.querySelectorAll<HTMLLIElement>('li[role="option"]').forEach((opt) => {
+          opt.addEventListener('click', () => {
+            const method = opt.dataset.method;
+            if (!method) return;
+            menu.querySelectorAll('li').forEach((li) => {
+              li.setAttribute('aria-selected', li === opt ? 'true' : 'false');
+            });
+            apply(method);
+            close();
+          });
+        });
+
+        // Sync DOM with the initially selected option on first paint.
+        const initial = (menu.querySelector('li[aria-selected="true"]') as HTMLLIElement | null)
+          ?.dataset.method ?? 'curl';
+        apply(initial);
+
+        // Click anywhere on the command button → copy
+        copyBtn.addEventListener('click', async () => {
+          if (copyBtn.disabled) return;
+          const text = (cmd.textContent ?? '').trim();
+          if (!text) return;
+          try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.dataset.state = 'done';
+            window.setTimeout(() => {
+              if (copyBtn.dataset.state === 'done') copyBtn.dataset.state = 'idle';
+            }, 1800);
+          } catch {
+            copyBtn.dataset.state = 'error';
+            window.setTimeout(() => { copyBtn.dataset.state = 'idle'; }, 1800);
+          }
+        });
+      }
+      function wireHeroDemo() {
+        const windowEl = document.querySelector<HTMLElement>('[data-demo-window]');
+        const terminal = document.querySelector<HTMLElement>('[data-demo-terminal]');
+        if (!windowEl || !terminal) return;
+
+        const frames = [
+          {
+            step: '1',
+            commands: [
+              { input: 'hello', output: ['Hello World'] },
+            ],
+          },
+          {
+            step: '2',
+            commands: [
+              {
+                input: 'hello',
+                output: [
+                  "<span class=\"err\">error: missing required param 'name' in 'hello'</span>",
+                  '<span class="tip">tip: Provide &lt;name&gt;</span>',
+                ],
+              },
+              { input: 'hello Bob', output: ['Hello Bob'] },
+            ],
+          },
+          {
+            step: '3',
+            commands: [
+              {
+                input: 'hello',
+                output: [
+                  "<span class=\"err\">error: missing required param 'name' in 'hello'</span>",
+                  '<span class="tip">tip: Provide -n, --name</span>',
+                ],
+              },
+              { input: 'hello -n Ann', output: ['Hello Ann'] },
+            ],
+          },
+          {
+            step: '4',
+            commands: [
+              { input: 'hello', output: ['Hello John'] },
+            ],
+          },
+          {
+            step: '5',
+            commands: [
+              {
+                input: 'hello',
+                picker: [
+                  '<span class="picker-item picker-item--active">&gt; Bob</span>',
+                  '<span class="picker-item">  Ann</span>',
+                  '<span class="picker-item">  John</span>',
+                ],
+                pickedPicker: [
+                  '<span class="picker-item">  Bob</span>',
+                  '<span class="picker-item picker-item--active">&gt; Ann</span>',
+                  '<span class="picker-item">  John</span>',
+                ],
+                output: ['Hello Ann'],
+              },
+            ],
+          },
+          {
+            step: '6',
+            commands: [
+              {
+                input: 'hello --help',
+                outputDelay: 760,
+                holdAfter: 3600,
+                output: [
+                  [
+                    'hello — Greet someone by name',
+                    '',
+                    'Parameters:',
+                    '  -n, --name &lt;string&gt;  Person to greet  (default: World)',
+                  ],
+                ],
+              },
+            ],
+          },
+        ];
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+        const renderPrompt = (input = '') => {
+          terminal.innerHTML = `<span class="prompt">$</span> <span class="typed">${input}</span><span class="cursor"></span>`;
+        };
+        const appendLine = (html: string) => {
+          terminal.insertAdjacentHTML('beforeend', `\n${html}`);
+        };
+        const renderPicker = async (items: string[], pickedItems?: string[]) => {
+          const promptLine = terminal.innerHTML.split('\n')[0];
+          terminal.innerHTML = [promptLine, ...items].join('\n');
+          await wait(760);
+          if (pickedItems) {
+            terminal.innerHTML = [promptLine, ...pickedItems].join('\n');
+            await wait(920);
+            await wait(320);
+          }
+        };
+
+        const typeCommand = async (input: string) => {
+          renderPrompt();
+          await wait(520);
+          const typed = terminal.querySelector<HTMLElement>('.typed');
+          if (!typed) return;
+          for (const char of input) {
+            typed.textContent += char;
+            await wait(72 + Math.random() * 48);
+          }
+          await wait(760);
+          terminal.querySelector('.cursor')?.remove();
+        };
+
+        const playFrame = async (frame: typeof frames[number]) => {
+          windowEl.dataset.demoStep = frame.step;
+          terminal.innerHTML = '';
+          await wait(1450);
+          for (const command of frame.commands) {
+            await typeCommand(command.input);
+            await wait(280);
+            if ('picker' in command && command.picker) {
+              await renderPicker(command.picker, command.pickedPicker);
+            }
+            for (const output of command.output) {
+              if (Array.isArray(output)) {
+                for (const line of output) appendLine(line);
+              } else {
+                appendLine(output);
+              }
+              await wait(command.outputDelay ?? 440);
+            }
+            await wait(command.holdAfter ?? 980);
+          }
+          await wait(1250);
+        };
+
+        if (reduceMotion) {
+          windowEl.dataset.demoStep = '5';
+          terminal.innerHTML = `<span class="prompt">$</span> hello --help
+hello — Greet someone by name
+
+Parameters:
+  -n, --name &lt;string&gt;  Person to greet  (default: World)`;
+          return;
+        }
+
+        const loop = async () => {
+          let index = 0;
+          while (true) {
+            await playFrame(frames[index]);
+            index = (index + 1) % frames.length;
+          }
+        };
+
+        void loop();
+      }
+      wireCopy();
+      wireInstallBar();
+      wireHeroDemo();
+    </script>
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0e1015;
+        --bg-soft: #15171f;
+        --bg-card: #1a1d27;
+        --fg: #e8e9ee;
+        --fg-muted: #a8acba;
+        --border: rgba(232, 233, 238, 0.1);
+        --accent: #9b5cdc;
+        --accent-2: #3dd9a1;
+        --gradient: linear-gradient(
+          90deg,
+          #3dd9a1 0%,
+          #3fb8c9 35%,
+          #6a78d6 70%,
+          #9b5cdc 100%
+        );
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      code, pre { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace; }
+      a { color: var(--fg); }
+
+      .skip-link {
+        position: absolute;
+        top: -3rem;
+        left: 1rem;
+        background: var(--accent);
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        z-index: 100;
+        transition: top 120ms ease;
+      }
+      .skip-link:focus { top: 1rem; }
+
+      .site-header {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        text-decoration: none;
+        color: var(--fg);
+      }
+      .brand__icon {
+        width: 1.85rem;
+        height: 1.85rem;
+        display: block;
+      }
+      .brand__name {
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: -0.005em;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .site-header nav {
+        display: flex;
+        gap: 1.25rem;
+      }
+      .site-header nav a {
+        text-decoration: none;
+        color: var(--fg-muted);
+        font-weight: 500;
+      }
+      .site-header nav a:hover,
+      .site-header nav a:focus-visible { color: var(--fg); }
+
+      main { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.84fr) minmax(560px, 1.16fr);
+        gap: clamp(2rem, 3vw, 3rem);
+        align-items: center;
+        padding: 4rem 0 5rem;
+      }
+      .hero__wordmark img { max-width: 320px; height: auto; }
+      .hero__tagline {
+        font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+        font-weight: 600;
+        line-height: 1.25;
+        margin: 1.25rem 0 2rem;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero__tagline-accent {
+        font-weight: 700;
+      }
+      .hero__no-prefix {
+        margin: 0 0 2rem;
+      }
+      .hero__strikes {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .hero__strikes li {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+        font-size: 0.95rem;
+        color: var(--fg-muted);
+      }
+      .hero__icon {
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+      .hero__win {
+        color: var(--fg) !important;
+        font-weight: 500;
+        margin-top: 0.25rem;
+      }
+      .hero__win code {
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        padding: 0.1rem 0.5rem;
+        border-radius: 0.35rem;
+        color: var(--accent-2);
+      }
+      .hero__cta { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+      .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.85rem 1.6rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #fff;
+        border: 1px solid transparent;
+        transition: transform 200ms cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                    box-shadow 200ms ease,
+                    border-color 200ms ease,
+                    background 200ms ease;
+        isolation: isolate;
+        overflow: hidden;
+      }
+      .btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      /* Frosted glass primary CTA */
+      .btn--primary {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+          0 8px 24px -10px rgba(0, 0, 0, 0.6);
+      }
+      .btn--primary::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.08) 0%,
+          transparent 50%
+        );
+        pointer-events: none;
+      }
+      .btn--primary:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(155, 92, 220, 0.5);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.3),
+          0 12px 32px -10px rgba(155, 92, 220, 0.45);
+      }
+      .btn--primary:active { transform: translateY(0); }
+
+      /* Brand-purple label inside the frosted button */
+      .btn__label {
+        color: #9b5cdc;
+        font-weight: 600;
+      }
+
+      .btn--ghost {
+        border-color: var(--border);
+        color: var(--fg);
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      .btn--ghost:hover {
+        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-1px);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .btn,
+        .btn::before,
+        .btn::after { transition: none !important; }
+        .btn:hover { transform: none !important; }
+      }
+
+      @media (max-width: 600px) {
+        .variant { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+        .variant__label { min-width: 0; }
+      }
+
+      .copy {
+        appearance: none;
+        background: transparent;
+        color: var(--fg-muted);
+        border: 1px solid var(--border);
+        border-radius: 0.4rem;
+        padding: 0.3rem 0.65rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+      .copy:hover { color: var(--fg); border-color: var(--accent); }
+
+      .hero__media {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0)),
+          var(--bg-soft);
+        border: 1px solid rgba(232, 233, 238, 0.14);
+        border-radius: 0.75rem;
+        aspect-ratio: 1.32 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 24px 70px -36px rgba(0, 0, 0, 0.9);
+      }
+      .demo-window {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: 2.25rem 1.04fr 0.96fr;
+        background: #0b0d12;
+      }
+      .demo-window__bar {
+        display: flex;
+        align-items: center;
+        gap: 0.42rem;
+        padding: 0 0.8rem;
+        background: #161922;
+        border-bottom: 1px solid rgba(232, 233, 238, 0.09);
+      }
+      .demo-window__bar span {
+        width: 0.58rem;
+        height: 0.58rem;
+        border-radius: 999px;
+        background: #ff5f57;
+      }
+      .demo-window__bar span:nth-child(2) { background: #ffbd2e; }
+      .demo-window__bar span:nth-child(3) { background: #28c840; }
+      .demo-pane {
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .demo-pane--editor {
+        background: #10131a;
+      }
+      .demo-pane--terminal {
+        background: #090b10;
+        border-top: 1px solid rgba(232, 233, 238, 0.1);
+      }
+      .demo-pane__title {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.85rem;
+        z-index: 2;
+        color: #737987;
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+        font-size: clamp(0.58rem, 1vw, 0.72rem);
+        line-height: 1;
+      }
+      .demo-code {
+        position: absolute;
+        inset: 0;
+        padding: clamp(1rem, 1.75vw, 1.45rem);
+        opacity: 0;
+        transform: translateY(0.35rem);
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+      .demo-code--yaml {
+        padding-top: clamp(1.6rem, 2.2vw, 2.05rem);
+      }
+      .demo-window[data-demo-step="1"] [data-yaml-step="1"],
+      .demo-window[data-demo-step="2"] [data-yaml-step="2"],
+      .demo-window[data-demo-step="3"] [data-yaml-step="3"],
+      .demo-window[data-demo-step="4"] [data-yaml-step="4"],
+      .demo-window[data-demo-step="5"] [data-yaml-step="5"],
+      .demo-window[data-demo-step="6"] [data-yaml-step="6"],
+      .demo-code--terminal {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .demo-code pre {
+        margin: 0;
+        height: 100%;
+        white-space: pre-wrap;
+        color: #d7dbea;
+        font-size: clamp(0.78rem, 1.08vw, 1rem);
+        line-height: 1.5;
+      }
+      .demo-code--terminal pre {
+        color: #c6cad7;
+        line-height: 1.42;
+      }
+      .demo-code code {
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+      }
+      .demo-code .key,
+      :global(.demo-code .key) { color: #b989ff; }
+      .demo-code--yaml code,
+      :global(.demo-code--yaml code) { color: #7ee7bd; }
+      .demo-code .comment,
+      :global(.demo-code .comment) { color: #7f8797; }
+      .demo-code .prompt,
+      :global(.demo-code .prompt) { color: #a6e3a1; }
+      .demo-code .err,
+      :global(.demo-code .err) { color: #ff6b6b; }
+      .demo-code .tip,
+      :global(.demo-code .tip) { color: #f9e2af; }
+      .demo-code .picker-muted,
+      :global(.demo-code .picker-muted) { color: #8790a3; }
+      .demo-code .picker-item,
+      :global(.demo-code .picker-item) { color: #d7dbea; }
+      .demo-code .picker-item--active,
+      :global(.demo-code .picker-item--active) {
+        color: #8bd5ca;
+        font-weight: 600;
+      }
+      .demo-code .typed,
+      :global(.demo-code .typed) { color: #eef1f8; }
+      .demo-code .cursor,
+      :global(.demo-code .cursor) {
+        display: inline-block;
+        width: 0.52em;
+        height: 1.1em;
+        margin-left: 0.08em;
+        vertical-align: -0.18em;
+        background: #eef1f8;
+        animation: terminal-cursor 920ms steps(1) infinite;
+      }
+
+      @keyframes terminal-cursor {
+        0%, 48% { opacity: 1; }
+        49%, 100% { opacity: 0; }
+      }
+
+      section { padding: 3.5rem 0; }
+      section h2 {
+        font-size: clamp(1.5rem, 2vw, 1.85rem);
+        margin: 0 0 2rem;
+      }
+      .example-grid {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .example-grid article {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+      }
+
+      /* Why Spellbook — 6 detailed feature cards in 2-col grid */
+      .why__lede {
+        margin: -1rem 0 2.25rem;
+        color: var(--fg-muted);
+        font-size: 1rem;
+        max-width: 56ch;
+      }
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+      }
+      .why-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 0.85rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        position: relative;
+        transition: border-color 200ms ease, transform 200ms ease;
+      }
+      .why-card:hover {
+        border-color: rgba(155, 92, 220, 0.4);
+        transform: translateY(-2px);
+      }
+      .why-card__head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.85rem;
+      }
+      .why-card__num {
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--accent-2);
+        letter-spacing: 0.08em;
+        flex-shrink: 0;
+        padding: 0.15rem 0.5rem;
+        border-radius: 0.35rem;
+        background: rgba(61, 217, 161, 0.12);
+        border: 1px solid rgba(61, 217, 161, 0.3);
+      }
+      .why-card h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.3;
+      }
+      .why-card p {
+        margin: 0;
+        color: var(--fg-muted);
+        font-size: 0.92rem;
+        line-height: 1.55;
+      }
+      .why-card code {
+        font-size: 0.85em;
+        padding: 0.05rem 0.35rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--fg);
+      }
+      .why-card .snippet pre code {
+        background: transparent;
+        border: none;
+        padding: 0;
+        font-size: inherit;
+      }
+
+      .why-card--wide { grid-column: 1 / -1; }
+
+      /* Comparison — three rows, each split into bad-left / good-right */
+      .compare-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .compare-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        align-items: stretch;
+        position: relative;
+      }
+      .compare-row::before {
+        content: '→';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        color: var(--fg);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.5);
+      }
+      .compare-side {
+        border-radius: 0.75rem;
+        padding: 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        position: relative;
+      }
+      .compare-side h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .compare-side pre { margin: 0; }
+      .compare-side--bad {
+        background:
+          radial-gradient(120% 80% at 0% 0%,
+            rgba(217, 124, 124, 0.18) 0%,
+            transparent 55%),
+          linear-gradient(180deg,
+            rgba(217, 124, 124, 0.12) 0%,
+            rgba(217, 124, 124, 0.04) 100%),
+          var(--bg-card);
+        border: 1px solid rgba(217, 124, 124, 0.32);
+        box-shadow:
+          0 0 0 1px rgba(217, 124, 124, 0.08),
+          0 14px 40px -20px rgba(217, 124, 124, 0.32);
+      }
+      .compare-side--good {
+        background:
+          linear-gradient(180deg,
+            rgba(61, 217, 161, 0.14) 0%,
+            rgba(63, 184, 201, 0.08) 35%,
+            rgba(106, 120, 214, 0.08) 70%,
+            rgba(155, 92, 220, 0.14) 100%),
+          var(--bg-card);
+        border: 1px solid transparent;
+        background-clip: padding-box;
+        box-shadow:
+          0 -10px 40px -20px rgba(61, 217, 161, 0.4),
+          0 16px 44px -18px rgba(155, 92, 220, 0.5);
+      }
+      .compare-side--good::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(180deg,
+          rgba(61, 217, 161, 0.7) 0%,
+          rgba(63, 184, 201, 0.5) 35%,
+          rgba(106, 120, 214, 0.5) 70%,
+          rgba(155, 92, 220, 0.7) 100%);
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+                mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      .cons,
+      .pros {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+      }
+      .cons li,
+      .pros li {
+        padding-left: 1.85rem;
+        position: relative;
+        line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .cons li strong,
+      .pros li strong {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--fg);
+      }
+      .cons li span,
+      .pros li span {
+        font-size: 0.88rem;
+        color: var(--fg-muted);
+      }
+      .cons li::before,
+      .pros li::before {
+        position: absolute;
+        left: 0;
+        top: 0.05rem;
+        width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .cons li::before {
+        content: '✕';
+        background: rgba(217, 124, 124, 0.18);
+        color: #e89494;
+        border: 1px solid rgba(217, 124, 124, 0.45);
+      }
+      .pros li::before {
+        content: '✓';
+        background: rgba(61, 217, 161, 0.16);
+        color: var(--accent-2);
+        border: 1px solid rgba(61, 217, 161, 0.45);
+      }
+      .cons li code,
+      .pros li code {
+        font-size: 0.85em;
+        padding: 0.05rem 0.35rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--fg);
+      }
+      .pros li em {
+        font-style: italic;
+        color: var(--accent-2);
+      }
+
+      /* Install bar — single pill with method dropdown + command + copy */
+      .install {
+        max-width: 920px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        padding-top: 0.75rem;
+      }
+      .install__cta {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 2.35rem;
+      }
+      .install-bar {
+        position: relative;
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+        gap: 0;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        padding: 0.35rem;
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 14px 40px -16px rgba(0, 0, 0, 0.7);
+      }
+      .install-bar__trigger {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--fg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 150ms ease, border-color 150ms ease;
+      }
+      .install-bar__trigger:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(155, 92, 220, 0.5);
+      }
+      .install-bar__trigger:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .install-bar__chevron {
+        opacity: 0.7;
+        transition: transform 150ms ease;
+      }
+      .install-bar__trigger[aria-expanded='true'] .install-bar__chevron {
+        transform: rotate(180deg);
+      }
+
+      /* Whole right side (command + icon) is one big copy button.
+         No padding/radius of its own — uses parent .install-bar's pill shape
+         via clip-path so the hover background reaches the rounded edges. */
+      .install-bar__cmd-btn {
+        appearance: none;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: transparent;
+        color: var(--fg);
+        border: none;
+        padding: 0 0.45rem 0 1rem;
+        margin: -0.35rem -0.35rem -0.35rem 0;
+        align-self: stretch;
+        cursor: pointer;
+        text-align: left;
+        border-radius: 0 999px 999px 0;
+        transition: background 150ms ease;
+      }
+      .install-bar__cmd-btn:hover { background: rgba(255, 255, 255, 0.05); }
+      .install-bar__cmd-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+      .install-bar__cmd-btn:disabled {
+        cursor: default;
+        background: transparent;
+      }
+
+      .install-bar__cmd {
+        flex: 1;
+        min-width: 0;
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+        font-size: 0.88rem;
+        color: var(--fg);
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .install-bar__hint {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.88rem;
+        color: var(--fg-muted);
+      }
+
+      /* Copy / check icon swap — bare icon, no background */
+      .install-bar__copy-icon {
+        flex-shrink: 0;
+        width: 1.8rem;
+        height: 1.8rem;
+        margin-right: 0.75rem;
+        color: var(--fg-muted);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: color 150ms ease;
+      }
+      .install-bar__copy-icon svg {
+        position: absolute;
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+      .install-bar__copy-icon .icon-check {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      .install-bar__cmd-btn:hover .install-bar__copy-icon {
+        color: var(--fg);
+      }
+      .install-bar__cmd-btn[data-state='done'] .install-bar__copy-icon {
+        color: var(--accent-2);
+      }
+      .install-bar__cmd-btn[data-state='done'] .icon-copy {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      .install-bar__cmd-btn[data-state='done'] .icon-check {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Dropdown menu */
+      .install-bar__menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        left: 0;
+        z-index: 30;
+        min-width: 16rem;
+        list-style: none;
+        margin: 0;
+        padding: 0.4rem;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.65rem;
+        box-shadow: 0 18px 44px -12px rgba(0, 0, 0, 0.7);
+        text-align: left;
+      }
+      .install-bar__menu li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.55rem 0.75rem;
+        border-radius: 0.45rem;
+        cursor: pointer;
+        transition: background 120ms ease;
+      }
+      .install-bar__menu li:hover,
+      .install-bar__menu li[aria-selected='true'] {
+        background: rgba(155, 92, 220, 0.14);
+      }
+      .install-bar__menu-key {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: var(--fg);
+      }
+      .install-bar__menu-desc {
+        font-size: 0.78rem;
+        color: var(--fg-muted);
+      }
+      .install-bar__menu-desc code {
+        font-family: 'Geist Mono', ui-monospace, monospace;
+        font-size: 0.85em;
+        padding: 0.05rem 0.3rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .install__hint {
+        margin: 1rem auto 0;
+        max-width: 64ch;
+        font-size: 0.92rem;
+        color: var(--fg-muted);
+        line-height: 1.6;
+      }
+      .install__hint code {
+        font-size: 0.85em;
+        padding: 0.05rem 0.35rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      /* Manual install — step-by-step list shown when "Manual" is selected */
+      .install__manual {
+        margin: 1.5rem 0 0;
+        text-align: left;
+      }
+      .manual-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+      }
+      .manual-steps > li {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 0.85rem;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .manual-steps h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--fg);
+      }
+      .manual-steps p {
+        margin: 0;
+        color: var(--fg-muted);
+        font-size: 0.92rem;
+        line-height: 1.55;
+      }
+      .manual-steps p code,
+      .manual-steps h4 code {
+        font-size: 0.85em;
+        padding: 0.05rem 0.35rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--fg);
+      }
+      .manual-steps a {
+        color: #c8a5f0;
+        text-decoration: underline;
+        text-decoration-color: rgba(155, 92, 220, 0.4);
+      }
+      .manual-steps a:hover { text-decoration-color: var(--accent); }
+
+      @media (max-width: 720px) {
+        .install-bar {
+          flex-wrap: wrap;
+          border-radius: 1.1rem;
+          width: 100%;
+        }
+        .install-bar__cmd {
+          flex-basis: 100%;
+          padding: 0.65rem 1rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          margin-top: 0.35rem;
+        }
+        .install-bar__menu {
+          min-width: 100%;
+        }
+      }
+
+      .example-grid pre {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 0.85rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-size: 0.85rem;
+        margin: 0.5rem 0 0.75rem;
+      }
+
+      /* Labelled snippet (file vs terminal) — used in compare + why sections */
+      .snippet {
+        display: flex;
+        flex-direction: column;
+      }
+      .snippet__label {
+        font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--fg-muted);
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: none;
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.5rem 0.5rem 0 0;
+      }
+      .snippet pre {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 0.85rem;
+        border-radius: 0 0 0.5rem 0.5rem;
+        overflow-x: auto;
+        font-size: 0.85rem;
+        margin: 0;
+        line-height: 1.55;
+      }
+      .snippet--err .snippet__label {
+        color: #e89494;
+        border-color: rgba(217, 124, 124, 0.4);
+        background: rgba(217, 124, 124, 0.12);
+      }
+      .snippet--err pre {
+        border-color: rgba(217, 124, 124, 0.32);
+        background:
+          linear-gradient(180deg,
+            rgba(217, 124, 124, 0.08) 0%,
+            transparent 60%),
+          rgba(0, 0, 0, 0.45);
+      }
+      .example-grid a { color: var(--accent-2); text-decoration: none; }
+      .example-grid a:hover { text-decoration: underline; }
+
+      .cta {
+        text-align: center;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        margin: 3rem 0;
+      }
+      .cta .hero__cta { justify-content: center; }
+
+      .site-footer {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+        color: var(--fg-muted);
+      }
+      .copyright { margin: 0; }
+      .footer-links { display: flex; gap: 1.25rem; }
+      .footer-links a { color: var(--fg-muted); text-decoration: none; }
+      .footer-links a:hover { color: var(--fg); }
+
+      @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; padding: 2.5rem 0; }
+        .why-grid,
+        .example-grid { grid-template-columns: 1fr; }
+        .compare-row { grid-template-columns: 1fr; gap: 1rem; }
+        .compare-row::before {
+          content: '↓';
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .demo-code,
+        .demo-code .cursor { animation: none; transition: none; }
+      }
+    </style>
+  </body>
+</html>

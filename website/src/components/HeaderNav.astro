@@ -1,0 +1,48 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const changelogHref = `${base}/changelog`;
+const repoHref = 'https://github.com/Nikoro/spellbook';
+---
+
+<nav class="hd-nav" aria-label="Header navigation">
+  <a class="hd-nav__link" href={changelogHref}>Changelog</a>
+  <a class="hd-nav__link" href={repoHref} rel="noopener" target="_blank">
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M8 .2a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1.1-2.7-1.1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.2-.1-.2-.4-1 .1-2 0 0 .7-.2 2.2.8a7.5 7.5 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.5 1 .2 1.8.1 2 .5.6.8 1.3.8 2.2 0 3-1.8 3.7-3.6 3.9.3.3.6.7.6 1.5v2.2c0 .2.1.5.5.4A8 8 0 0 0 8 .2Z"
+      />
+    </svg>
+    <span>GitHub</span>
+  </a>
+</nav>
+
+<style>
+  .hd-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hd-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 120ms ease;
+  }
+  .hd-nav__link:hover,
+  .hd-nav__link:focus-visible {
+    color: var(--sl-color-text-accent);
+  }
+  .hd-nav__link:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+  .hd-nav__link svg {
+    flex-shrink: 0;
+  }
+</style>

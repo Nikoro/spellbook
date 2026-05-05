@@ -1,0 +1,3 @@
+[1m[31merror:[0m tab indentation is not allowed
+  [2m-->[0m line 3
+[36mtip:[0m Replace tabs with spaces (2 or 4)

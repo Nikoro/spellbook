@@ -1,0 +1,2 @@
+error: missing required param 'env' in 'deploy'
+tip: Valid values: dev, staging, prod

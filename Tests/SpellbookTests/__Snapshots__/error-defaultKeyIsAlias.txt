@@ -1,0 +1,2 @@
+error: default 'stg' in 'deploy' is an alias
+tip: Use the canonical name 'staging' instead

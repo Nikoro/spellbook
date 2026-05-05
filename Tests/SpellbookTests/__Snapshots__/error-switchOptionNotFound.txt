@@ -1,0 +1,2 @@
+error: switch option 'qa' not found in 'deploy'
+tip: Available options: staging, production

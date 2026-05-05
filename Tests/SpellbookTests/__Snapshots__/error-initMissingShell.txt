@@ -1,0 +1,2 @@
+error: init: missing shell argument
+tip: Usage: spells init <zsh|bash|fish>

@@ -1,0 +1,37 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { siteTitleHref } = Astro.locals.starlightRoute;
+const href = siteTitleHref ?? base + '/';
+---
+
+<a href={href} class="sb-brand sl-flex" aria-label="Spellbook home">
+  <picture class="sb-brand__icon-wrap">
+    <source srcset={`${base}/icon.webp`} type="image/webp" />
+    <img class="sb-brand__icon" src={`${base}/icon.png`} alt="" width="32" height="32" />
+  </picture>
+  <span class="sb-brand__name" translate="no">Spellbook</span>
+</a>
+
+<style>
+  .sb-brand {
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .sb-brand__icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    display: block;
+  }
+  .sb-brand__name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.005em;
+    background: var(--sb-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+</style>

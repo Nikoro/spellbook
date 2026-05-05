@@ -1,0 +1,36 @@
+/* Spellbook brand variables — applied globally and consumed by Starlight overrides. */
+:root {
+  --sb-purple: #9b5cdc;
+  --sb-violet: #6a78d6;
+  --sb-teal: #3fb8c9;
+  --sb-mint: #3dd9a1;
+  --sb-bg: #0e1015;
+  --sb-bg-soft: #15171f;
+  --sb-fg: #e8e9ee;
+  --sb-fg-muted: #a8acba;
+  --sb-border: rgba(232, 233, 238, 0.1);
+  --sb-gradient: linear-gradient(
+    90deg,
+    #3dd9a1 0%,
+    #3fb8c9 35%,
+    #6a78d6 70%,
+    #9b5cdc 100%
+  );
+
+  --sb-font-ui: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --sb-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+html,
+body {
+  font-family: var(--sb-font-ui);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--sb-font-mono);
+}

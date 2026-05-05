@@ -1,0 +1,768 @@
+# Spellbook Documentation (full)
+
+> Project-specific shell commands, zero config.
+
+## Manifest
+
+---
+title: Manifest
+description: Complete syntax reference for spells.yaml — spells, params, switches, extends, placeholders, overrides, aliases, and the locked YAML subset.
+---
+
+A Spellbook manifest is a `spells.yaml` (or `.spells.yaml`) file. It supports two modes — **canonical** and **compact** — and a deliberately small YAML subset.
+
+## Two manifest modes
+
+### Canonical mode
+
+Spells live under a `spells:` key, alongside optional manifest metadata.
+
+```yaml
+extends: ../shared
+spells:
+  hello:
+    script: echo "Hello"
+```
+
+Use canonical mode when you need `extends:` or `version:`.
+
+### Compact mode
+
+Every top-level key is a spell. No manifest metadata.
+
+```yaml
+hello:
+  script: echo "Hello"
+```
+
+The two modes cannot mix at the top level — if you declare any manifest metadata (`version`, `extends`, `spells`), every spell must move under `spells:`.
+
+### Scalar shorthand
+
+```yaml
+hello: echo "Hello"
+```
+
+Equivalent to `hello:` with `script: echo "Hello"`.
+
+## Top-level keys (canonical)
+
+Exactly three are recognized: `version`, `extends`, `spells`. Anything else is a `reservedTopLevelKey` error.
+
+`version: 1` is the only accepted version. Missing defaults to 1.
+
+## Spell fields
+
+```yaml
+spells:
+  deploy:
+    description: Deploy to a target environment.
+    aliases: [d, ship]
+    silent: true
+    working_dir: ./deploy
+    shell: zsh
+    override: false
+    params:
+      env:
+    script: ./scripts/deploy.sh {{env}}
+```
+
+| Field | Meaning |
+|---|---|
+| `description` | One-line summary used by `spells list` and help. |
+| `aliases` | Alternate names for this spell. |
+| `params` | Positional arguments and named flags. |
+| `switch` | Branching of the spell into named sub-paths (mutually exclusive with `script` + `params`). |
+| `script` | Shell script run by the terminal command. |
+| `silent` | If `true`, hide successful output (spinner shown in TTY). |
+| `working_dir` | Override working directory; defaults to the manifest's directory. |
+| `shell` | Shell binary used to interpret `script`. Defaults to `bash`. |
+| `override` | Required when the spell name shadows an existing command on `$PATH`. |
+
+You can also set the description from a same-line comment instead of the field:
+
+```yaml
+spells:
+  build: swift build  ## Compile the package
+```
+
+When both forms are present, the `description:` field wins.
+
+## Params
+
+`params:` is always a **map** — each entry is `name:` followed by an optional body. List form (`- name`) is rejected at parse time.
+
+### Positional (inferred)
+
+```yaml
+spells:
+  greet:
+    script: echo "Hello, {{name}}"
+    params:
+      name:
+```
+
+```sh
+greet World      # Hello, World
+```
+
+A bare key with no body is a required positional param.
+
+### Named flags
+
+```yaml
+spells:
+  greet:
+    script: echo "Hello, {{name}}"
+    params:
+      name:
+        flags: -n, --name
+        default: World
+```
+
+```sh
+greet --name Alice   # Hello, Alice
+greet                # Hello, World
+```
+
+### Types
+
+Params support `string` (default), `int`, `double`, `number`, `bool`, and enum values.
+
+```yaml
+params:
+  count:
+    type: int
+  verbose:
+    type: bool
+  env:
+    values: [dev, staging, prod]
+```
+
+- Missing required params are errors.
+- Missing optional params use the type's zero value or their declared default.
+- Enum values are matched case-insensitively and canonicalized.
+- Bool flags toggle when present without a value.
+
+### Explicit mode
+
+Group params under `required:` and `optional:` for explicit control. Mixing groups with bare params is an error.
+
+```yaml
+params:
+  required:
+    name:
+  optional:
+    greeting:
+      default: Hello
+```
+
+### Passthrough args
+
+Forward extra arguments with `...args` directly inside the script string:
+
+```yaml
+spells:
+  test:
+    script: swift test ...args
+```
+
+```sh
+test --filter MyTest --verbose
+# swift test --filter MyTest --verbose
+```
+
+Use `--` to stop Spellbook from parsing further arguments:
+
+```sh
+test -- --some-flag
+```
+
+All values are shell-escaped by default. More than one `...args` is a validation error.
+
+## Switches
+
+Define mutually exclusive command branches. The field is `switch:` (singular):
+
+```yaml
+spells:
+  deploy:
+    switch:
+      staging:
+        script: ./deploy.sh staging
+      production:
+        script: ./deploy.sh production
+    default: staging
+```
+
+```sh
+deploy             # ./deploy.sh staging (default)
+deploy production  # ./deploy.sh production
+```
+
+Notes:
+
+- `default:` is a sibling of `switch:` and references a branch key (or holds an inline command).
+- Without a `default`, a TTY shows a picker; non-TTY contexts error with options listed.
+- Branches accept the same fields as spells: own `params`, nested `switch`, `aliases`, runtime fields.
+- A branch can be a scalar shorthand: `staging: ./deploy.sh staging`.
+
+`script:` and `switch:` cannot coexist on the same node. Neither can `params:` and `switch:`.
+
+## Aliases
+
+```yaml
+spells:
+  test:
+    aliases: [t, check]
+    script: swift test
+```
+
+Both `t` and `check` generate wrappers that invoke the `test` spell. Help for an alias shows canonical help with an "alias for" note.
+
+## Extends
+
+Share spells across projects with `extends:`:
+
+```yaml
+extends: ../shared
+spells:
+  local-only:
+    script: echo "just this project"
+```
+
+- A single string path. Arrays are not supported.
+- Closer manifests win on whole-spell conflicts.
+- Chains are supported — a parent can extend its own parent.
+- `extends: ~` pulls from `~/spells.yaml` (home fallback).
+- Cycles are detected and reported with the full chain.
+
+Without `extends:`, Spellbook checks `~/spells.yaml` as a global fallback when no project manifest is found.
+
+## Overrides
+
+Wrap an existing `$PATH` command safely:
+
+```yaml
+spells:
+  cat:
+    override: true
+    script: "{{cat}} -n ...args"
+```
+
+```sh
+cat file.txt    # /usr/bin/cat -n file.txt
+```
+
+- `override: true` is required to shadow a `$PATH` binary.
+- The override placeholder is `{{spell-name}}` — the spell's own name. It resolves to the next external `$PATH` match, skipping Spellbook wrappers.
+- Shell builtins (`cd`, `export`, etc.) cannot be overridden.
+- Aliases cannot shadow `$PATH` binaries even when the canonical spell uses `override`.
+
+## Placeholders
+
+Placeholders use `{{name}}` syntax. Only declared params and override placeholders resolve; everything else is left untouched so template strings (e.g. handlebars) survive.
+
+| Placeholder | Behavior |
+|---|---|
+| `{{name}}` | Shell-escaped value of param `name`. |
+| `{{spell-name}}` | In an `override: true` spell only — the original external command of the same name. |
+| `...args` | Each passthrough token shell-escaped and joined by spaces. |
+
+Substitutions are always shell-escaped — there is no raw insertion.
+
+## YAML subset
+
+Spellbook implements its own deliberately small YAML parser. Supported:
+
+- Block maps and nested maps.
+- Block sequences of scalars (`- foo`) and inline flow sequences (`[a, b]`). Sequences cannot contain maps or nested sequences.
+- Folded and literal block scalars (`>`, `|`).
+- Single- and double-quoted scalars.
+- Comments (`#`) and same-line description comments (`## description`).
+- Numeric, boolean, and null scalar literals.
+
+Anchors, tags, complex keys, and merge keys are not supported.
+
+## CLI
+
+---
+title: CLI
+description: Reference for every Spellbook subcommand — synopsis, examples, and flags for activate, list, diff, doctor, clean, create, init, completion, and help.
+---
+
+`spells` is the single binary. All subcommands route through it. Interactive pickers never fire in non-TTY contexts.
+
+## Synopsis
+
+```sh
+spells [<subcommand>] [args...]
+```
+
+Bare `spells` activates the merged manifest from your current directory. Every other path is an explicit subcommand.
+
+## Subcommands
+
+### `spells` (activate)
+
+Validates the merged manifest and (re)generates wrappers under `~/.spellbook/bin/`. Wrapper writes are atomic — activation either fully succeeds or leaves the previous state untouched.
+
+```sh
+spells
+```
+
+### `spells list`
+
+Print canonical spells and aliases for the current merged manifest. Override spells get an `[override]` marker.
+
+```sh
+spells list
+spells list --verbose
+```
+
+`--verbose` adds parent-manifest provenance, default values, and switch terminals.
+
+### `spells diff`
+
+Show added, changed, and removed spells since the last activation snapshot — useful before re-activating in a project you haven't touched in a while.
+
+```sh
+spells diff
+```
+
+### `spells doctor`
+
+Run the full diagnostic suite without changing any files: YAML validity, discovery, extends chain, `$PATH` integration, wrapper state, name shadowing, placeholder/param consistency, override usage, strict-mode warnings, case-insensitive entrypoint warnings.
+
+```sh
+spells doctor
+spells doctor --fix
+```
+
+`--fix` re-activates to resolve state/wrapper drift.
+
+### `spells clean`
+
+Remove wrappers.
+
+```sh
+spells clean <name>      # remove a single wrapper + its state entry
+spells clean --orphans   # remove wrappers whose spells no longer exist
+spells clean --all       # remove every wrapper and clear this project's state
+```
+
+### `spells create`
+
+Scaffold a minimal `spells.yaml`:
+
+```sh
+spells create            # creates spells.yaml with a sample spell
+spells create build      # creates with a spell named `build`
+```
+
+Refuses to overwrite an existing manifest.
+
+### `spells init <shell>`
+
+Print shell integration (PATH + wrapper-level TAB completion) for the target shell. The output is written to stdout — `spells init` does not edit dotfiles.
+
+```sh
+# zsh (~/.zshrc) or bash (~/.bashrc)
+eval "$(spells init zsh)"
+
+# fish (~/.config/fish/config.fish)
+spells init fish | source
+```
+
+The snippet sets `$SPELLBOOK_HOME`, adds `$SPELLBOOK_HOME/bin` to `$PATH`, and registers the TAB completion handler. See [Shell Integration](./shell-integration/) for what each shell expects.
+
+On first activation, Spellbook offers to set this up automatically.
+
+### `spells completion <shell>`
+
+Print the legacy Phase 2 completion script for the `spells` keyword itself (subcommand completion + spell-name completion after `help` / `clean`). Wrapper-level completion lives in `spells init`.
+
+```sh
+spells completion zsh
+```
+
+### `spells help`
+
+```sh
+spells help
+spells help <spell>
+spells help <spell> <branch>
+```
+
+Spell-level help renders aliases, declared params with types and defaults, switch trees, and any nested switch help.
+
+### `spells --version`
+
+```sh
+spells --version
+```
+
+### Hidden subcommands
+
+- `spells run <wrapper>` — internal. Wrappers dispatch through this.
+- `spells complete <wrapper> --cword N -- <tokens...>` — completion oracle. See [Shell Integration](./shell-integration/#wrapper-completion).
+
+## Silent mode
+
+`silent: true` on a spell runs commands with stdout/stderr buffered. On success the buffer is discarded; on failure it is flushed to your terminal. In a TTY a spinner shows progress. In non-TTY contexts the streams pass through unmodified — no spinner control characters in CI logs.
+
+## Environment passed to spells
+
+When a spell runs, Spellbook injects stable env vars for child processes — useful when a script wants to detect that it's running under Spellbook. Exact names are stable; check the README for the current set.
+
+## Exit codes
+
+The wrapper returns the exit code of the executed script. When activation, parsing, or argument resolution fail, Spellbook returns its own non-zero exit code with a structured error message. There is no `--exit-error` flag — non-zero exit codes are the default.
+
+## Examples
+
+---
+title: Examples
+description: Real-world spells.yaml examples for Swift, Node.js, Python, static sites, Docker, database migrations, monorepos with extends, and home manifests.
+---
+
+A grab-bag of `spells.yaml` files copy-pasteable into real projects. Each example is a complete manifest — drop it in your project root, run `spells`, and the wrappers come live.
+
+## Swift project
+
+```yaml
+build: swift build -c release
+
+test:
+  aliases: [t]
+  script: swift test ...args
+
+format: swift-format format --in-place --recursive Sources Tests
+
+lint: swiftlint --strict
+```
+
+```sh
+spells
+build              # swift build -c release
+t --filter Foo     # swift test --filter Foo
+format
+```
+
+## Node.js / Bun project
+
+```yaml
+dev: bun run dev
+
+test:
+  aliases: [t]
+  script: bun test ...args
+
+lint:
+  silent: true
+  script: bun run lint
+
+deploy:
+  switch:
+    staging:    bun run deploy:staging
+    production: bun run deploy:production
+  default: staging
+```
+
+## Python project
+
+```yaml
+spells:
+  venv:
+    script: |
+      rm -rf .venv
+      python3 -m venv .venv
+      .venv/bin/pip install -e '.[dev]'
+
+  run:
+    script: .venv/bin/python -m myapp ...args
+
+  test:
+    script: .venv/bin/pytest ...args
+
+  fmt:
+    script: |
+      .venv/bin/ruff format .
+      .venv/bin/ruff check --fix .
+```
+
+## Static site
+
+```yaml
+dev: bun run dev
+build: bun run build
+preview: bun run preview --host
+
+deploy:
+  description: Push the built site to GitHub Pages.
+  script: |
+    bun run build
+    git -C dist init
+    git -C dist add .
+    git -C dist commit -m "Deploy"
+    git -C dist push -f origin HEAD:gh-pages
+```
+
+## Docker
+
+```yaml
+up: docker compose up -d
+down: docker compose down
+
+logs:
+  script: docker compose logs -f ...args
+
+shell:
+  description: Open a shell in the named container.
+  script: docker compose exec ...args bash
+```
+
+```sh
+logs                 # tails all services
+logs api             # tails the api service
+shell api            # opens a bash in the api container
+```
+
+## Database migrations
+
+```yaml
+db:
+  switch:
+    migrate:
+      switch:
+        up:     ./scripts/db migrate up
+        down:   ./scripts/db migrate down
+        status: ./scripts/db migrate status
+      default: status
+    seed:
+      params:
+        dataset:
+          values: [small, full]
+          default: small
+      script: ./scripts/db seed {{dataset}}
+    reset:
+      description: Drop, recreate, migrate, and seed.
+      script: |
+        ./scripts/db reset
+        ./scripts/db migrate up
+        ./scripts/db seed small
+```
+
+```sh
+db migrate           # ./scripts/db migrate status (default)
+db migrate up
+db seed              # ./scripts/db seed small
+db seed full
+db reset
+```
+
+## Monorepo with `extends`
+
+A team-wide parent manifest at `~/team/spells.yaml`:
+
+```yaml
+spells:
+  test:
+    script: turbo run test ...args
+  build: turbo run build
+  lint: turbo run lint
+```
+
+A per-package child manifest in `apps/web/spells.yaml`:
+
+```yaml
+extends: ../../../team/spells.yaml
+spells:
+  dev: turbo run dev --filter web
+
+  # `build` is inherited from the parent.
+  # Override it locally:
+  build: turbo run build --filter web --concurrency=4
+```
+
+Closer-manifest-wins on whole-spell conflicts. The child's `dev` is added; the child's `build` replaces the parent's.
+
+## Override an existing command
+
+```yaml
+spells:
+  cat:
+    override: true
+    script: "{{cat}} -n ...args"
+
+  ls:
+    override: true
+    script: "{{ls}} --color=auto ...args"
+```
+
+```sh
+cat README.md       # /usr/bin/cat -n README.md
+ls -la              # /bin/ls --color=auto -la
+```
+
+`{{cat}}` resolves to the next external `$PATH` match outside `~/.spellbook/bin`.
+
+## Personal home manifest
+
+`~/spells.yaml` — used as the fallback when no project manifest is found in the current directory chain:
+
+```yaml
+spells:
+  g:
+    description: Pretty git log.
+    script: git log --oneline --graph --decorate ...args
+
+  clean-branches:
+    description: Delete merged local branches.
+    script: |
+      git fetch --prune
+      git branch --merged | grep -vE '^\*|main|master' | xargs -r git branch -d
+
+  ports:
+    description: Show open TCP listeners.
+    script: lsof -nP -iTCP -sTCP:LISTEN
+```
+
+Spells in the home manifest are available everywhere you don't have a project manifest. See `spells doctor` for the discovered fallback path.
+
+## Troubleshooting
+
+---
+title: Troubleshooting
+description: Diagnose Spellbook problems — read spells doctor output, fix common errors (missing parent, name shadowing, override required), and recover from wrapper conflicts.
+---
+
+When Spellbook fails it tries to fail loudly. Errors include a header, the failing context, a caret pointing at the offending token where applicable, a body that explains the rule, and a suggestion. Use this page when the error alone isn't enough.
+
+## Start with `spells doctor`
+
+```sh
+spells doctor
+```
+
+`doctor` runs the full diagnostic suite without changing any files. It reports:
+
+- **Manifest discovery** — which `spells.yaml` was found, or whether the home fallback is in use.
+- **YAML and parse** — invalid YAML, unknown top-level keys, mixed canonical/compact mode.
+- **Extends chain** — every parent file resolved, cycles detected, missing parents.
+- **`$PATH` integration** — whether `$SPELLBOOK_HOME/bin` is on `$PATH`.
+- **Wrapper state** — wrappers that no longer match a spell, and stale wrappers from deleted projects.
+- **Name shadowing** — spells whose names collide with `$PATH` binaries without `override: true`.
+- **Placeholders / params** — placeholder references that don't match a declared param.
+- **Override usage** — overrides on names that aren't actually on `$PATH`.
+- **Strict warnings** — case-insensitive entrypoint warnings, suspicious patterns.
+- **Shell init** — whether your shell's init snippet is wired up.
+
+`doctor` exits 0 unless something hard-fails. Add `--strict` to fail on warnings too.
+
+## Common errors
+
+### `spells: manifest not found`
+
+You ran `spells` from outside any project tree, and there is no home manifest at `~/spells.yaml`. Either:
+
+- `cd` into a project that has a `spells.yaml`, **or**
+- create a home manifest with `spells create --home`.
+
+### `parent manifest not found`
+
+`extends:` points at a file or directory that doesn't exist.
+
+```text
+error: parent manifest not found
+   --> spells.yaml:1
+   |
+ 1 | extends: ../team/spells.yaml
+   |          ^^^^^^^^^^^^^^^^^^^^
+   = note: tried `/Users/me/team/spells.yaml`
+```
+
+Confirm the path resolves from the manifest's directory. Relative paths are resolved against the manifest, not the current working directory.
+
+### `cycle detected in extends chain`
+
+Two manifests extend each other, directly or via a chain. Spellbook stops parsing immediately. Break the cycle — usually one of the manifests should not be extending at all, or should extend a third common parent instead.
+
+### `name shadows existing command`
+
+A spell or alias collides with a binary on `$PATH`.
+
+```text
+error: name shadows existing command
+   --> spells.yaml:3
+   |
+ 3 |   ls:
+   |   ^^
+   = note: `ls` already exists on PATH at /bin/ls
+   = help: add `override: true` to the spell to confirm intentional shadowing
+```
+
+If the shadow is intentional (e.g. you want a custom `ls`), add `override: true` and use `{{ls}}` (the spell's own name as a placeholder) to call the real binary inside your script. If it isn't, rename the spell.
+
+### `override placeholder not allowed`
+
+You wrote `{{foo}}` referencing the spell's own name in a spell that doesn't have `override: true`. Override placeholders only resolve for explicit overrides — otherwise the same name is interpreted as an unknown param.
+
+### `unknown placeholder`
+
+```text
+error: unknown placeholder
+   --> spells.yaml:6
+   |
+ 6 |   script: ./deploy {{environemnt}}
+   |                    ^^^^^^^^^^^^^^^
+   = note: spell `deploy` declares params: env
+```
+
+Typo. Fix the placeholder name to match a declared param.
+
+### `param mode mixed`
+
+A spell declares some params with explicit `?`/types and others as flat names. Choose one mode and apply it consistently.
+
+### `passthrough not supported on this script`
+
+You used `...args` more than once in the same script, or the spell has both `script:` and `switch:` so passthrough has no terminal command to land on. `...args` is a literal token inside the `script` string — there is no `params: [...args]` form.
+
+## Wrapper conflicts
+
+After `spells`, a wrapper exists at `$SPELLBOOK_HOME/bin/<name>`. If two projects activate spells with the same name, the most recent activation wins — wrappers are global, not per-project.
+
+When you run a wrapper from a different project, the wrapper passes your *current* working directory back to `spells run`, which discovers that project's manifest. Spells don't leak between projects unless you mean them to (via `extends`).
+
+If you delete a project, its wrappers stay until you run `spells clean`. `doctor` flags stale wrappers explicitly.
+
+## Activation problems
+
+### "Activation succeeded" but the wrapper isn't on `$PATH`
+
+`$SPELLBOOK_HOME/bin` isn't in your `$PATH`. Run `spells doctor` — the PATH check will say so. Fix by sourcing the integration snippet (see [Shell Integration](./shell-integration/)).
+
+### Half-activated state
+
+Activation is transactional — wrapper writes use temp files plus atomic rename, and the state file is updated last. A failed activation leaves the previous wrappers untouched. If you ever see something half-written, run `spells` again or `spells clean` to reset.
+
+### Wrapper exits 127 (`spells: command not found`)
+
+The wrapper invokes `spells` through `$PATH`. If the binary moved or `$PATH` was overridden, the wrapper can't dispatch back. Fix `$PATH`, or reinstall via the curl installer.
+
+## Completion problems
+
+See the [Shell Integration troubleshooting section](./shell-integration/#troubleshooting).
+
+## Filing a bug
+
+Reproduction template — please include in any GitHub issue:
+
+1. `spells --version`
+2. macOS version, shell + version (`zsh --version`, `bash --version`, etc.).
+3. The minimum `spells.yaml` that reproduces the failure.
+4. The exact command that triggers the bug.
+5. The full error output (Spellbook's structured errors are usually enough).
+
+[Open an issue on GitHub](https://github.com/Nikoro/spellbook/issues/new). Bugs that include a minimum `spells.yaml` get fixed faster than ones that don't.

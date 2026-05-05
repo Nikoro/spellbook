@@ -1,0 +1,2 @@
+error: switch leaf 'deploy.staging' in 'deploy' has no script
+tip: Add a script to the leaf branch

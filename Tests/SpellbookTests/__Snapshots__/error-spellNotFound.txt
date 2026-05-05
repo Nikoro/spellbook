@@ -1,0 +1,2 @@
+error: spell 'bild' not found
+tip: Check spelling or run `spells list`

@@ -1,0 +1,3 @@
+error: unexpected argument 'extra' in argument list
+  --> spell 'build'
+tip: Add ...args to the script to accept extra arguments

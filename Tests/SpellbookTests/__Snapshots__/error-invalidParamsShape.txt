@@ -1,0 +1,2 @@
+error: 'params:' in 'deploy' is a sequence, expected a map
+tip: Use a map form like 'params: { name: {} }'

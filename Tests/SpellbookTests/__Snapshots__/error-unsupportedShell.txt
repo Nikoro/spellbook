@@ -1,0 +1,2 @@
+error: unsupported shell 'nushell'
+tip: Supported shells: zsh, bash, fish

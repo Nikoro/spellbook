@@ -1,0 +1,3 @@
+error: invalid value 'abc' for 'count'
+  --> spell 'deploy'
+tip: Expected type: int (e.g. 42)

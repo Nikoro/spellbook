@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nikoro.github.io/spellbook/sitemap-index.xml

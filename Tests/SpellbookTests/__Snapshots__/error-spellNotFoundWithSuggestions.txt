@@ -1,0 +1,2 @@
+error: spell 'build' not found in current project
+tip: Available in: /other/project

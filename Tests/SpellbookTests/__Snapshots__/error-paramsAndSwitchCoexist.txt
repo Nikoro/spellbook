@@ -1,0 +1,2 @@
+error: 'run' has top-level params and switch
+tip: Move params into switch branches

@@ -1,0 +1,3 @@
+[1m[31merror:[0m invalid value 'abc' for 'count'
+  [2m-->[0m spell 'deploy'
+[36mtip:[0m Expected type: int (e.g. 42)

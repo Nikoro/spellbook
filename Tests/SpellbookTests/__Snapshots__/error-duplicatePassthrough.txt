@@ -1,0 +1,2 @@
+error: multiple ...args in 'run'
+tip: Use ...args at most once per script

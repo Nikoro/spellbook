@@ -1,0 +1,2 @@
+error: invalid spell name '123bad'
+tip: Start with a letter; use letters, digits, hyphens, or underscores

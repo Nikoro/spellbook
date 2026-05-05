@@ -1,0 +1,2 @@
+error: param 'git' shadows override spell 'git'
+tip: Rename the param

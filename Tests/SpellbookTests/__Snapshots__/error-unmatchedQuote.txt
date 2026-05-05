@@ -1,0 +1,3 @@
+error: unmatched quote
+  --> line 5, column 12
+tip: Close the quote on the same line

@@ -1,0 +1,2 @@
+error: alias 'ls' of 'myls' shadows a PATH binary
+tip: Remove the alias; aliases cannot use override

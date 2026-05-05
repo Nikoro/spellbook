@@ -1,0 +1,16 @@
+- `docs/architecture.md` — intended users, design principles, layer boundaries, manifest/runtime model, out-of-scope list.
+- `docs/product-decisions.md` — locked behavior, manifest/runtime semantics, Phase 3 wrapper-completion spec.
+- `docs/module-map.md` — module responsibilities and test ownership.
+- `docs/roadmap.md` — current position, MVP/Phase 2/Phase 3 sequence, follow-ups, milestones, risks, deferred decisions.
+- `docs/project-status.md` — latest verified position in the plan.
+- `docs/development-workflow.md` — how agents should make changes.
+- `docs/testing.md` — TDD rules, test layout, test commands.
+- `docs/quality-gates.md` — required checks, local scripts, release perf budgets.
+- `docs/git-and-changelog.md` — commit, staging, changelog policy.
+- `docs/website.md` — Astro + Starlight public site, URL contracts, deferred site decisions. The site itself lives in `website/` and is published at `nikoro.github.io/spellbook/`. Local dev: `cd website && bun install && bun dev` (Bun-based; the site CI workflow `.github/workflows/site.yml` only runs on changes under `website/**` or `CHANGELOG.md`).
+
+- If behavior is not in `docs/product-decisions.md` or `docs/architecture.md`, ask before inventing it.
+- Run `scripts/check.sh` after code changes; do not move forward with failing build or tests.
+- Keep Core pure: no direct filesystem, process, terminal, `print`, or `exit`.
+- Do not add runtime dependencies; keep the custom YAML parser.
+- Repo docs, code, and CLI output are English. Conversation may be Polish or English.

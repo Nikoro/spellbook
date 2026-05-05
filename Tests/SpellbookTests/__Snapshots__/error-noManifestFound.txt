@@ -1,0 +1,2 @@
+error: no spells.yaml found
+tip: Run `spells create` to create one

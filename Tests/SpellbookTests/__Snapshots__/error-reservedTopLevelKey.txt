@@ -1,0 +1,2 @@
+error: reserved top-level key 'env'
+tip: Move 'env' under the `spells:` key

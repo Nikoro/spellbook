@@ -1,0 +1,3 @@
+error: tab indentation is not allowed
+  --> line 3
+tip: Replace tabs with spaces (2 or 4)
