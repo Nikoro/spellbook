@@ -32,7 +32,7 @@ The script runs the project gates in the intended order:
 These are not enforced by `scripts/check.sh` but are release-blocking when measured in release-mode smoke tests:
 
 - **20-spell activation** finishes in under **100 ms**.
-- **Simple spell execution** finishes in under **750 ms**. Execution spans three forks — generated wrapper, `spells run`, and the target shell — so this is a realistic macOS budget rather than a tight one.
+- **Simple spell execution** finishes in under **750 ms**. Execution traverses the generated wrapper, `spells run`, manifest resolution, and the target shell, so this remains a realistic macOS compatibility budget.
 
 Latest measured values are recorded in [`project-status.md`](./project-status.md).
 

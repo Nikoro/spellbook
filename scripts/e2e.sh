@@ -12,6 +12,7 @@ if ! command -v swift >/dev/null 2>&1; then
   exit 0
 fi
 
+user_spellbook_bin="${SPELLBOOK_HOME:-$HOME/.spellbook}/bin"
 tmpdir="$(mktemp -d -t spellbook-e2e-XXXXXX)"
 export SPELLBOOK_HOME="$tmpdir/home"
 mkdir -p "$SPELLBOOK_HOME"
@@ -32,6 +33,16 @@ if [[ ! -x "$binary" ]]; then
 fi
 
 cp "$binary" "$tmpdir/spells"
+original_path="$PATH"
+PATH=""
+previous_ifs="$IFS"
+IFS=:
+for path_entry in $original_path; do
+  if [[ "$path_entry" != "$user_spellbook_bin" ]]; then
+    PATH="${PATH:+$PATH:}$path_entry"
+  fi
+done
+IFS="$previous_ifs"
 export PATH="$tmpdir:$SPELLBOOK_HOME/bin:$PATH"
 
 passed=0
@@ -244,8 +255,8 @@ fi
 # ---------------------------------------------------------------------------
 # Performance: simple spell execution
 #
-# Execution spans three forks (wrapper -> `spells run` -> bash -c), so the
-# macOS-first budget is 750 ms rather than the 100 ms activation target.
+# Execution traverses the wrapper, `spells run`, manifest resolution, and the
+# target shell, so the compatibility budget remains above the activation target.
 # ---------------------------------------------------------------------------
 run_scenario "perf: spell execution"
 start_ms="$(python3 -c 'import time; print(int(time.time()*1000))')"
@@ -371,6 +382,7 @@ if [[ "$override_output" == *"1"*"hello"* && "$override_output" == *"2"*"world"*
 else
   fail_scenario "expected numbered output, got: $override_output"
 fi
+(cd "$tmpdir/override" && "$tmpdir/spells" clean cat) > /dev/null 2>&1
 
 # ---------------------------------------------------------------------------
 # Regression: BUGS/008 — PATH-shadow validator must fire during activation
@@ -716,7 +728,7 @@ else
   mkdir -p "$tmpdir/picker"
   cat > "$tmpdir/picker/spells.yaml" << 'YAML'
 spells:
-  sbdeploy:
+  sb-e2e-picker-probe:
     switch:
       staging:
         script: echo "to staging"
@@ -727,7 +739,8 @@ YAML
   picker_capture="$tmpdir/picker/capture.txt"
   rm -f "$picker_capture"
   expect_bin_dir="$(dirname "$tmpdir/spells")"
-  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sbdeploy" \
+  picker_expect_ec=0
+  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sb-e2e-picker-probe" \
   EXPECT_CAPTURE="$picker_capture" \
   EXPECT_PATH="$expect_bin_dir:$PATH" \
   EXPECT_HOME="$SPELLBOOK_HOME" \
@@ -737,6 +750,7 @@ YAML
     log_file $env(EXPECT_CAPTURE)
     set env(PATH) $env(EXPECT_PATH)
     set env(SPELLBOOK_HOME) $env(EXPECT_HOME)
+    set env(TERM) xterm-256color
     cd $env(EXPECT_CWD)
     spawn $env(EXPECT_SPELL_BIN)
     expect -re {staging}
@@ -745,13 +759,14 @@ YAML
     sleep 0.1
     send "\r"
     expect eof
-  ' > /dev/null 2>&1
-  if grep -q "to production" "$picker_capture" \
+  ' > /dev/null 2>&1 || picker_expect_ec=$?
+  if [[ $picker_expect_ec -eq 0 ]] \
+     && grep -q "to production" "$picker_capture" \
      && grep -q $'\x1b\[?25l' "$picker_capture" \
      && grep -q $'\x1b\[?25h' "$picker_capture"; then
     pass
   else
-    fail_scenario "picker did not resolve to production (bytes=$(wc -c < "$picker_capture" | tr -d ' '))"
+    fail_scenario "picker did not resolve to production (exit=$picker_expect_ec, bytes=$(wc -c < "$picker_capture" | tr -d ' '))"
   fi
 fi
 
@@ -770,7 +785,7 @@ else
   cancel_capture="$tmpdir/picker/cancel.txt"
   rm -f "$cancel_capture"
   expect_bin_dir="$(dirname "$tmpdir/spells")"
-  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sbdeploy" \
+  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sb-e2e-picker-probe" \
   EXPECT_CAPTURE="$cancel_capture" \
   EXPECT_PATH="$expect_bin_dir:$PATH" \
   EXPECT_HOME="$SPELLBOOK_HOME" \
@@ -780,6 +795,7 @@ else
     log_file $env(EXPECT_CAPTURE)
     set env(PATH) $env(EXPECT_PATH)
     set env(SPELLBOOK_HOME) $env(EXPECT_HOME)
+    set env(TERM) xterm-256color
     cd $env(EXPECT_CWD)
     spawn $env(EXPECT_SPELL_BIN)
     expect -re {production}
@@ -812,7 +828,7 @@ else
   dumb_capture="$tmpdir/picker/dumb.txt"
   rm -f "$dumb_capture"
   expect_bin_dir="$(dirname "$tmpdir/spells")"
-  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sbdeploy" \
+  EXPECT_SPELL_BIN="$SPELLBOOK_HOME/bin/sb-e2e-picker-probe" \
   EXPECT_CAPTURE="$dumb_capture" \
   EXPECT_PATH="$expect_bin_dir:$PATH" \
   EXPECT_HOME="$SPELLBOOK_HOME" \

@@ -6,6 +6,10 @@ The format is based on Keep a Changelog, and this project uses Conventional Comm
 
 ## [Unreleased]
 
+### Fixed
+
+- Preserve foreground terminal control for interactive spells, including device selection and runtime input in `flutter run`.
+
 ## [0.1.0] - 2026-05-05
 
 ### Added

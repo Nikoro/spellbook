@@ -133,7 +133,8 @@ Models <- Core <- CLI
 | `Sources/SpellbookKit/CLI/DoctorCommand.swift` | Diagnostics for manifests, path setup, wrappers, shadows, placeholders, strict mode, and extends. | Integration |
 | `Sources/SpellbookKit/CLI/CreateCommand.swift` | Manifest scaffold command. | Test-after/integration |
 | `Sources/SpellbookKit/CLI/InitCommand.swift` | zsh, bash, and fish shell integration snippets. | Test-after |
-| `Sources/SpellbookKit/CLI/ScriptExecutor.swift` | Subprocess adapter using `/usr/bin/env <shell> -c`, cwd, stdio, env metadata, and exit forwarding. | Test-after |
+| `Sources/SpellbookKit/CLI/ScriptExecutor.swift` | Builds `/usr/bin/env <shell> -c` invocations with cwd and env metadata, then delegates execution. | Test-after |
+| `Sources/SpellbookKit/CLI/FoundationProcessRunner.swift` | Replaces `spells run` with the target process so terminal foreground control, signals, and exit status pass through unchanged. | PTY integration |
 | `Sources/SpellbookKit/CLI/WrapperGenerator.swift` | Atomic wrapper writer: collects entrypoints, writes via protocol, rollback on failure. | Test-after |
 | `Sources/SpellbookKit/CLI/AtomicWrapperWriter.swift` | Foundation-based WrapperWriter: temp file, chmod, atomic rename. | Through WrapperGenerator tests |
 | `Sources/SpellbookKit/CLI/SilentRunner.swift` | Spinner, buffering, overflow fallback, and non-TTY no-op around script execution. | Test-after |

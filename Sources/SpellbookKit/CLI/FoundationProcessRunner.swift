@@ -1,4 +1,9 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#endif
 
 public final class FoundationProcessRunner: ProcessRunner {
     public init() {}
@@ -10,33 +15,47 @@ public final class FoundationProcessRunner: ProcessRunner {
         environment: [String: String]?,
         workingDirectory: String?
     ) throws -> Int32 {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: executablePath)
-        process.arguments = arguments
-
-        if let env = environment {
-            process.environment = ProcessInfo.processInfo.environment
-                .merging(env) { _, new in new }
-        }
-        if let cwd = workingDirectory {
-            process.currentDirectoryURL = URL(fileURLWithPath: cwd)
+        if let workingDirectory, chdir(workingDirectory) != 0 {
+            throw launchError(executablePath: executablePath, arguments: arguments)
         }
 
-        process.standardInput = FileHandle.standardInput
-        process.standardOutput = FileHandle.standardOutput
-        process.standardError = FileHandle.standardError
-
-        do {
-            try process.run()
-        } catch {
-            let shell = arguments.first ?? executablePath
-            throw SpellbookError.scriptLaunchFailed(
-                shell: shell,
-                reason: error.localizedDescription
-            )
+        var argumentPointers = makePointers([executablePath] + arguments)
+        var environmentPointers = makePointers(resolvedEnvironment(overrides: environment))
+        defer {
+            releasePointers(argumentPointers)
+            releasePointers(environmentPointers)
         }
 
-        process.waitUntilExit()
-        return process.terminationStatus
+        _ = executablePath.withCString { executable in
+            argumentPointers.withUnsafeMutableBufferPointer { argumentBuffer in
+                environmentPointers.withUnsafeMutableBufferPointer { environmentBuffer in
+                    execve(executable, argumentBuffer.baseAddress, environmentBuffer.baseAddress)
+                }
+            }
+        }
+        throw launchError(executablePath: executablePath, arguments: arguments)
+    }
+
+    private func resolvedEnvironment(overrides: [String: String]?) -> [String] {
+        let current = ProcessInfo.processInfo.environment
+        let merged = overrides.map { current.merging($0) { _, new in new } } ?? current
+        return merged.map { "\($0.key)=\($0.value)" }
+    }
+
+    private func makePointers(_ values: [String]) -> [UnsafeMutablePointer<CChar>?] {
+        values.map { value in value.withCString { strdup($0) } } + [nil]
+    }
+
+    private func releasePointers(_ pointers: [UnsafeMutablePointer<CChar>?]) {
+        for case let pointer? in pointers {
+            free(pointer)
+        }
+    }
+
+    private func launchError(executablePath: String, arguments: [String]) -> SpellbookError {
+        SpellbookError.scriptLaunchFailed(
+            shell: arguments.first ?? executablePath,
+            reason: String(cString: strerror(errno))
+        )
     }
 }
