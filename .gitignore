@@ -19,3 +19,7 @@ DerivedData/
 .ralph/
 .tools/
 __pycache__/
+
+/scripts/quality/js/node_modules/
+
+/build/quality/duplicates/

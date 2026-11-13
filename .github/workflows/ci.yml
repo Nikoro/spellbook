@@ -11,5 +11,14 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install duplicate detector
+        run: npm --prefix scripts/quality/js ci --ignore-scripts --no-audit --no-fund
+      - name: Verify duplicate detector installation
+        run: scripts/quality/js/node_modules/.bin/jscpd --version
+      - name: Verify quality tooling
+        run: scripts/quality/python.sh -m unittest discover -s scripts/tests
       - name: Run quality gates
         run: scripts/check.sh

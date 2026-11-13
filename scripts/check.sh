@@ -3,6 +3,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+scripts/quality/python.sh scripts/quality/check_duplicates.py "$@"
+
 checks=(
   "scripts/check-file-size.sh"
   "scripts/check-one-type-per-file.sh"

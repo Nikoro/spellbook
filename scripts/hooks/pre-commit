@@ -3,6 +3,6 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 scripts/quality/commit_gate.sh staged --no-review
 scripts/quality/python.sh -m unittest discover -s scripts/tests
-scripts/check.sh
+scripts/check.sh --staged
 scripts/quality/commit_gate.sh check
 exec scripts/quality/commit_gate.sh review --check

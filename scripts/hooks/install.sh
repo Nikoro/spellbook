@@ -24,5 +24,7 @@ else
     "$ROOT/scripts/quality/commit_gate_git.sh" clone git@github.com:Nikoro/commit_gate.git "$GATE"
 fi
 "$ROOT/scripts/quality/commit_gate.sh" --help >/dev/null
+"$ROOT/scripts/quality/python.sh" "$ROOT/scripts/quality/check_duplicates.py"
+
 git config core.hooksPath scripts/hooks
 printf 'Hooks installed: core.hooksPath -> scripts/hooks\n'
