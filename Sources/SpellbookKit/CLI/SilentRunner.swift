@@ -28,8 +28,6 @@ public struct SilentRunner {
     }
 }
 
-// MARK: - Passthrough (non-TTY or non-silent)
-
 extension SilentRunner {
     private func executePassthrough(
         _ spell: PreparedSpell
@@ -42,8 +40,6 @@ extension SilentRunner {
         )
     }
 }
-
-// MARK: - Silent TTY execution
 
 extension SilentRunner {
     private func executeSilent(
@@ -91,8 +87,6 @@ extension SilentRunner {
         )
     }
 }
-
-// MARK: - Result presentation
 
 extension SilentRunner {
     private func presentResult(

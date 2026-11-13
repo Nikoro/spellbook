@@ -18,8 +18,6 @@ struct NumberedPickerTests {
         return term
     }
 
-    // MARK: - Valid selection
-
     @Test func validNumberSelectsOption() {
         let term = terminal("2")
         let result = NumberedPicker.pick(
@@ -43,8 +41,6 @@ struct NumberedPickerTests {
         )
         #expect(result == .selected(2))
     }
-
-    // MARK: - Invalid input
 
     @Test func zeroCancels() {
         let term = terminal("0")
@@ -82,8 +78,6 @@ struct NumberedPickerTests {
         #expect(result == .cancelled)
     }
 
-    // MARK: - Edge cases
-
     @Test func emptyOptionsReturnsCancelled() {
         let term = terminal("1")
         let result = NumberedPicker.pick(
@@ -103,8 +97,6 @@ struct NumberedPickerTests {
         )
         #expect(result == .cancelled)
     }
-
-    // MARK: - Output format
 
     @Test func rendersNumberedOptions() {
         let term = terminal("1")

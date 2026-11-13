@@ -3,8 +3,6 @@ import Testing
 
 struct RunResolverAdvancedTests {
 
-    // MARK: - Switch selection
-
     @Test func switchSelection() throws {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -36,8 +34,6 @@ struct RunResolverAdvancedTests {
         #expect(result.resolvedScript == "deploy --env prod")
     }
 
-    // MARK: - Extends resolution
-
     @Test func extendsResolution() throws {
         let parent = SpellbookManifest(spells: [
             SpellDefinition(name: "shared", script: "echo shared")
@@ -63,8 +59,6 @@ struct RunResolverAdvancedTests {
         #expect(result.resolvedScript == "echo shared")
     }
 
-    // MARK: - Override placeholder
-
     @Test func overridePlaceholder_resolvesExternalCommand() throws {
         let manifest = SpellbookManifest(spells: [
             SpellDefinition(
@@ -89,8 +83,6 @@ struct RunResolverAdvancedTests {
         #expect(result.resolvedScript == "'/usr/bin/git' status '--all'")
     }
 
-    // MARK: - Runtime fields propagate
-
     @Test func runtimeFields_propagate() throws {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -111,8 +103,6 @@ struct RunResolverAdvancedTests {
         #expect(result.resolvedWorkingDir == "/project/./src")
         #expect(result.shell == "zsh")
     }
-
-    // MARK: - Environment and working directory
 
     @Test func environmentMetadata_populated() throws {
         let resolver = makeResolver(
@@ -152,8 +142,6 @@ struct RunResolverAdvancedTests {
         )
         #expect(result.resolvedWorkingDir == "/Users/me/code")
     }
-
-    // MARK: - Helpers
 
     private struct FakeLookup: OverrideLookup {
         let results: [String: String]

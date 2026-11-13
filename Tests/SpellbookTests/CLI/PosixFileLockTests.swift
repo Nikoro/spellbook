@@ -22,10 +22,6 @@ struct PosixFileLockTests {
     }
 
     @Test func openFailureSurfacesFileLockError() throws {
-        // Place the lock at a path whose parent is a regular file, not a
-        // directory. ensureParentDirectoryExists will throw, but if it did
-        // succeed the open() would still fail; either way the error must
-        // propagate as FileLockError.
         let directory = try makeTempDir()
         defer { try? FileManager.default.removeItem(atPath: directory) }
         let parentFile = directory + "/parent"
@@ -38,9 +34,6 @@ struct PosixFileLockTests {
     }
 
     @Test func bareFilenameWithoutDirectoryDoesNotThrow() throws {
-        // Path with no slash: deletingLastPathComponent is empty, so the
-        // ensureParentDirectoryExists guard returns early. Use a temp dir
-        // as cwd so the lock file lands somewhere disposable.
         let directory = try makeTempDir()
         defer { try? FileManager.default.removeItem(atPath: directory) }
         let originalCwd = FileManager.default.currentDirectoryPath

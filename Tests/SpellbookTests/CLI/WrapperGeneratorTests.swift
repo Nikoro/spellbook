@@ -3,8 +3,6 @@ import Testing
 
 struct WrapperGeneratorTests {
 
-    // MARK: - Canonical names
-
     @Test func singleSpell_writesOneWrapper() throws {
         let writer = MockWrapperWriter()
         let paths = try generate(
@@ -16,8 +14,6 @@ struct WrapperGeneratorTests {
         #expect(paths["hello"] == "/bin/hello")
         #expect(writer.writtenFiles["/bin/hello"] != nil)
     }
-
-    // MARK: - Aliases
 
     @Test func aliases_produceAdditionalWrappers() throws {
         let writer = MockWrapperWriter()
@@ -45,8 +41,6 @@ struct WrapperGeneratorTests {
         #expect(aliasContent.contains("\"deploy\""))
     }
 
-    // MARK: - Multiple spells
-
     @Test func multipleSpells_writeAllWrappers() throws {
         let writer = MockWrapperWriter()
         let paths = try generate(
@@ -60,8 +54,6 @@ struct WrapperGeneratorTests {
         #expect(paths.count == 2)
         #expect(writer.writtenFiles.count == 2)
     }
-
-    // MARK: - Rollback on failure
 
     @Test func writeFailure_rollsBackPreviousWrappers() {
         let writer = MockWrapperWriter()
@@ -78,8 +70,6 @@ struct WrapperGeneratorTests {
         #expect(writer.writtenFiles.isEmpty)
         #expect(writer.removedPaths.contains("/bin/first"))
     }
-
-    // MARK: - Helpers
 
     @discardableResult
     private func generate(

@@ -6,8 +6,6 @@ enum ErrorReporterRuntime {
             ?? ErrorReporterCommand.render(error)
     }
 
-    // MARK: - Switch errors (4 cases)
-
     private static func renderSwitch(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -33,8 +31,6 @@ enum ErrorReporterRuntime {
             return nil
         }
     }
-
-    // MARK: - Shadow & builtin errors (4 cases)
 
     private static func renderShadow(
         _ error: SpellbookError

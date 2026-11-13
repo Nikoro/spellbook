@@ -3,8 +3,6 @@ import Testing
 
 struct RunResolverTests {
 
-    // MARK: - Full pipeline: discover → parse → validate → resolve
-
     @Test func simpleSpell_resolvesScript() throws {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -22,8 +20,6 @@ struct RunResolverTests {
         #expect(result.manifestPath == "/project/spells.yaml")
     }
 
-    // MARK: - Spell not found
-
     @Test func spellNotFound_throws() {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -37,8 +33,6 @@ struct RunResolverTests {
         }
     }
 
-    // MARK: - No manifest
-
     @Test func noManifest_throws() {
         let resolver = RunResolver(
             fileSystem: MockFileSystem(),
@@ -50,8 +44,6 @@ struct RunResolverTests {
             try resolver.resolve(spellName: "hello", argv: [], cwd: "/empty")
         }
     }
-
-    // MARK: - Alias resolution
 
     @Test func resolveByAlias() throws {
         let resolver = makeResolver(
@@ -71,8 +63,6 @@ struct RunResolverTests {
         #expect(result.name == "build")
         #expect(result.resolvedScript == "swift build")
     }
-
-    // MARK: - Param resolution
 
     @Test func paramSubstitution() throws {
         let resolver = makeResolver(
@@ -95,8 +85,6 @@ struct RunResolverTests {
         #expect(result.resolvedScript == "echo 'world'")
     }
 
-    // MARK: - Passthrough args
-
     @Test func passthroughExpansion() throws {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -112,8 +100,6 @@ struct RunResolverTests {
         #expect(result.resolvedScript == "cmd '-v' '--force'")
     }
 
-    // MARK: - Validation error propagates
-
     @Test func validationError_throws() {
         let resolver = makeResolver(
             manifest: SpellbookManifest(spells: [
@@ -126,8 +112,6 @@ struct RunResolverTests {
             try resolver.resolve(spellName: "1invalid", argv: [], cwd: "/project")
         }
     }
-
-    // MARK: - Helpers
 
     private func makeResolver(
         manifest: SpellbookManifest,

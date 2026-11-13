@@ -32,8 +32,6 @@ struct ActivationLockTests {
         #expect(env.state.stored != nil)
     }
 
-    // MARK: - Helpers
-
     private struct Env {
         let fileSystem: MockFileSystem
         let reader: MockManifestReader

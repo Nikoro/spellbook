@@ -100,33 +100,13 @@ struct DiffCommandTests {
         #expect(lines == ["- old  (/parent/spells.yaml)"])
     }
 
-    @Test func entryWithEmptyOrigin_omitsParenthesis() throws {
-        // Direct test of the formatter via the public DiffEntry contract:
-        // when origin is empty, the format should drop the parenthesised hint.
-        let env = makeEnvironment()
-        env.fileSystem.files.insert("/project/spells.yaml")
-        env.reader.manifests["/project/spells.yaml"] = SpellbookManifest(spells: [
-            SpellDefinition(name: "build", script: "make")
-        ])
-        // No state -> 'added' with the manifest path as origin. Sanity: we
-        // never reach the empty-origin branch from the live pipeline because
-        // DiffDetector always supplies a path. The empty-origin branch is
-        // covered by passing the test data through and asserting the output
-        // shape includes the parenthesis when origin is non-empty.
-        let lines = try makeCommand(env).run(cwd: "/project")
-        #expect(lines == ["+ build  (/project/spells.yaml)"])
-    }
-
     @Test func resolverError_propagates() {
         let env = makeEnvironment()
-        // No manifest registered -> resolver throws noManifestFound.
 
         #expect(throws: SpellbookError.noManifestFound) {
             try makeCommand(env).run(cwd: "/nowhere")
         }
     }
-
-    // MARK: - Helpers
 
     private struct TestEnvironment {
         let fileSystem: MockFileSystem

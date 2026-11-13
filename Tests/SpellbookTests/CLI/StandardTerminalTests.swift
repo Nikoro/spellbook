@@ -4,8 +4,6 @@ import Testing
 
 struct StandardTerminalTests {
 
-    // MARK: - ANSI output
-
     @Test func hideCursor_writesANSISequence() {
         let sut = makeSUT()
         sut.terminal.hideCursor()
@@ -42,8 +40,6 @@ struct StandardTerminalTests {
         #expect(sut.stdout() == "")
     }
 
-    // MARK: - Basic writes
-
     @Test func write_sendsUtf8ToStdout() {
         let sut = makeSUT()
         sut.terminal.write("hello")
@@ -63,15 +59,11 @@ struct StandardTerminalTests {
         #expect(sut.stdout() == "")
     }
 
-    // MARK: - Raw mode guard
-
     @Test func enableRawMode_noopWhenCapabilityOff() throws {
         let sut = makeSUT(supportsRawMode: false)
         try sut.terminal.enableRawMode()
         sut.terminal.restoreMode()
     }
-
-    // MARK: - Helpers
 
     private struct SUT {
         let terminal: StandardTerminal

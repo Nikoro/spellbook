@@ -3,8 +3,6 @@ import Testing
 
 struct OverrideResolverTests {
 
-    // MARK: - PATH walk order
-
     @Test func findsFirstMatchInPathOrder() {
         let fileSystem = MockFileSystem()
         fileSystem.files = ["/usr/local/bin/git", "/usr/bin/git"]
@@ -28,8 +26,6 @@ struct OverrideResolverTests {
 
         #expect(resolver.externalCommand(for: "git") == "/usr/bin/git")
     }
-
-    // MARK: - Spellbook bin exclusion
 
     @Test func skipsSpellbookBinDirectory() {
         let fileSystem = MockFileSystem()
@@ -55,8 +51,6 @@ struct OverrideResolverTests {
         #expect(resolver.externalCommand(for: "git") == "/usr/bin/git")
     }
 
-    // MARK: - Missing external command
-
     @Test func returnsNil_whenNoExternalCommandFound() {
         let fileSystem = MockFileSystem()
         let resolver = OverrideResolver(
@@ -80,8 +74,6 @@ struct OverrideResolverTests {
         #expect(resolver.externalCommand(for: "mytool") == nil)
     }
 
-    // MARK: - Denied entries
-
     @Test func skipsDeniedEntries() {
         let fileSystem = MockFileSystem()
         fileSystem.deniedPaths = ["/restricted/bin/git"]
@@ -94,8 +86,6 @@ struct OverrideResolverTests {
 
         #expect(resolver.externalCommand(for: "git") == "/usr/bin/git")
     }
-
-    // MARK: - Empty PATH
 
     @Test func emptyPathDirectories_returnsNil() {
         let fileSystem = MockFileSystem()

@@ -4,8 +4,6 @@ import Testing
 
 struct ManifestCacheCodecTests {
 
-    // MARK: round-trip
-
     @Test func roundTrip_flatSpell() throws {
         let spell = SpellDefinition(name: "hello", description: "say hi", script: "echo hi")
         let manifest = SpellbookManifest(spells: [spell])
@@ -69,8 +67,6 @@ struct ManifestCacheCodecTests {
         #expect(decoded.extendsChain == paths)
     }
 
-    // MARK: corruption / version
-
     @Test func decode_rejectsBadMagic() {
         var corrupted = ManifestCacheCodec.encode(
             manifest: SpellbookManifest(spells: []), extendsChain: []
@@ -82,7 +78,6 @@ struct ManifestCacheCodecTests {
     @Test func decode_rejectsUnsupportedVersion() {
         let manifest = SpellbookManifest(spells: [SpellDefinition(name: "x", script: "y")])
         var data = ManifestCacheCodec.encode(manifest: manifest, extendsChain: [])
-        // magic(4) | formatVersion(u16)  — bump version beyond supported.
         data[4] = 0xFF
         data[5] = 0xFF
         #expect(ManifestCacheCodec.decode(data) == nil)
@@ -112,7 +107,6 @@ struct ManifestCacheCodecTests {
     }
 
     @Test func decode_rejectsUnknownDefaultBranchTag() {
-        // Manifest with a switch and an explicit "none" default branch (tag 0).
         let option = SwitchOptionDefinition(
             name: "stg", command: SpellDefinition(name: "stg-cmd", script: "ok")
         )
@@ -123,10 +117,6 @@ struct ManifestCacheCodecTests {
         )
         let manifest = SpellbookManifest(spells: [spell])
         var data = ManifestCacheCodec.encode(manifest: manifest, extendsChain: [])
-        // The DefaultBranch.none tag is byte 0 written immediately after the
-        // switch options. Patching every 0x00 would corrupt unrelated data, so
-        // walk back from the tail: the encoder writes the branch tag last and
-        // only uses 0x00 there for `.none`. The tail byte is the tag.
         data[data.count - 1] = 0xFF
         #expect(ManifestCacheCodec.decode(data) == nil)
     }
@@ -141,11 +131,8 @@ struct ManifestCacheCodecTests {
         #expect(first == second)
     }
 
-    // MARK: projectHash
-
     @Test func projectHash_isSha256Hex_ofAbsolutePath() {
         let hash = ManifestCacheCodec.projectHash(absoluteManifestPath: "/tmp/spells.yaml")
-        // SHA-256 hex digest length = 64
         #expect(hash.count == 64)
         #expect(hash.allSatisfy { $0.isHexDigit })
     }

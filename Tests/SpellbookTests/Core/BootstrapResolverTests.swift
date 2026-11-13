@@ -19,8 +19,6 @@ struct BootstrapResolverTests {
         ))
     }
 
-    // MARK: - Already configured
-
     @Test func binDirInPath_returnsAlreadyConfigured() {
         #expect(resolve(pathEnv: "/usr/bin:\(binDir):/usr/local/bin") == .alreadyConfigured)
     }
@@ -29,8 +27,6 @@ struct BootstrapResolverTests {
         let rcFile = "some stuff\n# spellbook\neval \"$(spells init zsh)\"\n"
         #expect(resolve(rcFileContent: rcFile) == .alreadyConfigured)
     }
-
-    // MARK: - Interactive offers
 
     @Test func tty_zsh_offersInteractive() {
         guard case let .offerInteractive(shell, rcPath, line) = resolve() else {
@@ -59,8 +55,6 @@ struct BootstrapResolverTests {
         #expect(line.contains("spells init fish | source"))
     }
 
-    // MARK: - Non-TTY
-
     @Test func nonTTY_zsh_printsManual() {
         guard case let .printManual(shell, line) = resolve(isTTY: false) else {
             Issue.record("Expected .printManual"); return
@@ -77,8 +71,6 @@ struct BootstrapResolverTests {
         #expect(line.contains("spells init fish | source"))
     }
 
-    // MARK: - Unknown shell
-
     @Test func unknownShell_returnsUnknownShell() {
         #expect(resolve(shell: "nushell") == .unknownShell)
     }
@@ -86,8 +78,6 @@ struct BootstrapResolverTests {
     @Test func nilShell_returnsUnknownShell() {
         #expect(resolve(shell: nil) == .unknownShell)
     }
-
-    // MARK: - Edge cases
 
     @Test func nilPath_offersBootstrap() {
         guard case .offerInteractive = resolve(pathEnv: nil) else {
@@ -107,8 +97,6 @@ struct BootstrapResolverTests {
         }
         #expect(shell == "zsh")
     }
-
-    // MARK: - Integration line format
 
     @Test func zshLine_usesEvalForm() {
         guard case let .offerInteractive(_, _, line) = resolve() else {

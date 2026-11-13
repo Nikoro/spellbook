@@ -1,8 +1,6 @@
 #!/bin/sh
 set -eu
 
-# Spellbook installer
-# Usage: curl -sSfL https://raw.githubusercontent.com/Nikoro/spellbook/main/install.sh | sh
 
 REPO="Nikoro/spellbook"
 VERSION="${SPELLBOOK_VERSION:-latest}"
@@ -109,13 +107,11 @@ setup_shell() {
             ;;
     esac
 
-    # Check if shell integration already exists
     if [ -f "$RC_FILE" ] && grep -q "# spellbook" "$RC_FILE" 2>/dev/null; then
         echo "Shell integration already configured in $RC_FILE."
         return
     fi
 
-    # Check if install dir is in PATH
     PATH_SETUP=""
     case ":$PATH:" in
         *":$HOME/.local/bin:"*) ;;

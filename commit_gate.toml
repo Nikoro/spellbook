@@ -1,0 +1,96 @@
+[mirror_tests]
+enabled = true
+sources = ["Sources/SpellbookKit/Core/**", "Sources/SpellbookKit/CLI/**"]
+exempt = ["Sources/SpellbookKit/CLI/DevTTYSource.swift"]
+
+[mirror_tests.layouts.swift]
+segment = ["Sources/SpellbookKit", "Tests/SpellbookTests"]
+
+[mirror_tests.test_files]
+"Sources/SpellbookKit/CLI/ANSIColors.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotColorTests.swift"
+"Sources/SpellbookKit/CLI/ActivationCommand.swift" = "Tests/SpellbookTests/Integration/ActivationIntegrationTests.swift"
+"Sources/SpellbookKit/CLI/BootstrapSubcommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/CompleteCommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/CompleteSubcommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/CompletionCommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/DefaultPathChecker.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/ErrorReporter.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotParseTests.swift"
+"Sources/SpellbookKit/CLI/ErrorReporterArgs.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotRuntimeTests.swift"
+"Sources/SpellbookKit/CLI/ErrorReporterCommand.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotRuntimeTests.swift"
+"Sources/SpellbookKit/CLI/ErrorReporterNaming.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotParseTests.swift"
+"Sources/SpellbookKit/CLI/ErrorReporterRuntime.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotRuntimeTests.swift"
+"Sources/SpellbookKit/CLI/FoundationCapturingRunner.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/FoundationFileSystem.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/FoundationFileWriter.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/FoundationManifestContentReader.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/FoundationManifestLoader.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/FoundationManifestReader.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/InitCommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/ManifestCacheHook.swift" = "Tests/SpellbookTests/CLI/ManifestCacheReaderTests.swift"
+"Sources/SpellbookKit/CLI/ManifestCacheReaderAdapter.swift" = "Tests/SpellbookTests/CLI/ManifestCacheReaderTests.swift"
+"Sources/SpellbookKit/CLI/ManifestCacheWriterAdapter.swift" = "Tests/SpellbookTests/CLI/ManifestCacheWriterTests.swift"
+"Sources/SpellbookKit/CLI/OverflowSink.swift" = "Tests/SpellbookTests/CLI/SilentRunnerFailureTests.swift"
+"Sources/SpellbookKit/CLI/PickCommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/PickSubcommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/PipeCollector.swift" = "Tests/SpellbookTests/CLI/FoundationAdaptersTests.swift"
+"Sources/SpellbookKit/CLI/RenderedError.swift" = "Tests/SpellbookTests/CLI/ErrorSnapshotParseTests.swift"
+"Sources/SpellbookKit/CLI/RootHelp.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/RunSubcommand.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/ShellDefaults.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/SpellbookApp.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/SpellbookAppHelp.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/CLI/StateSubcommands.swift" = "Tests/SpellbookTests/CLI/CommandRoutingTests.swift"
+"Sources/SpellbookKit/Core/ArgvScanner.swift" = "Tests/SpellbookTests/Core/ParamResolverFlagTests.swift"
+"Sources/SpellbookKit/Core/AsciiClass.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorNameTests.swift"
+"Sources/SpellbookKit/Core/BashIntegrationScript.swift" = "Tests/SpellbookTests/Core/ShellIntegrationScriptsTests.swift"
+"Sources/SpellbookKit/Core/CommaSeparated.swift" = "Tests/SpellbookTests/Core/SpellbookParserParamTests.swift"
+"Sources/SpellbookKit/Core/CompletionRequest.swift" = "Tests/SpellbookTests/Core/WrapperCompletionGrammarTests.swift"
+"Sources/SpellbookKit/Core/CompletionValueRules.swift" = "Tests/SpellbookTests/Core/WrapperCompletionGrammarTests.swift"
+"Sources/SpellbookKit/Core/CompletionWalker.swift" = "Tests/SpellbookTests/Core/WrapperCompletionGrammarTests.swift"
+"Sources/SpellbookKit/Core/DefaultBranchValidator.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorSwitchTests.swift"
+"Sources/SpellbookKit/Core/DiffProjectKey.swift" = "Tests/SpellbookTests/Core/DiffDetectorTests.swift"
+"Sources/SpellbookKit/Core/DoctorSemanticChecks.swift" = "Tests/SpellbookTests/Core/DoctorSemanticTests.swift"
+"Sources/SpellbookKit/Core/DuplicateTokens.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorNameTests.swift"
+"Sources/SpellbookKit/Core/EnumChoiceBridge.swift" = "Tests/SpellbookTests/Core/ParamResolverPickerTests.swift"
+"Sources/SpellbookKit/Core/FishIntegrationScript.swift" = "Tests/SpellbookTests/Core/ShellIntegrationScriptsTests.swift"
+"Sources/SpellbookKit/Core/FuzzyScorer.swift" = "Tests/SpellbookTests/Core/FuzzyMatcherTests.swift"
+"Sources/SpellbookKit/Core/LeafWalkState.swift" = "Tests/SpellbookTests/Core/WrapperCompletionGrammarTests.swift"
+"Sources/SpellbookKit/Core/ManifestCacheDecoder.swift" = "Tests/SpellbookTests/Core/ManifestCacheCodecTests.swift"
+"Sources/SpellbookKit/Core/ManifestCacheReader.swift" = "Tests/SpellbookTests/Core/ManifestCacheCodecTests.swift"
+"Sources/SpellbookKit/Core/ManifestCacheTypes.swift" = "Tests/SpellbookTests/Core/ManifestCacheCodecTests.swift"
+"Sources/SpellbookKit/Core/ManifestCacheWriter.swift" = "Tests/SpellbookTests/Core/ManifestCacheCodecTests.swift"
+"Sources/SpellbookKit/Core/ManifestHasher.swift" = "Tests/SpellbookTests/Integration/ActivationIntegrationTests.swift"
+"Sources/SpellbookKit/Core/OverrideLookup.swift" = "Tests/SpellbookTests/Core/PlaceholderResolverOverrideTests.swift"
+"Sources/SpellbookKit/Core/ParamAttributes.swift" = "Tests/SpellbookTests/Core/SpellbookParserParamTests.swift"
+"Sources/SpellbookKit/Core/ParamAttributesReader.swift" = "Tests/SpellbookTests/Core/SpellbookParserParamTests.swift"
+"Sources/SpellbookKit/Core/ParamDefinition+MissingError.swift" = "Tests/SpellbookTests/Core/ParamResolverPositionalTests.swift"
+"Sources/SpellbookKit/Core/ParamFlagUniqueness.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorParamTests.swift"
+"Sources/SpellbookKit/Core/ParamName.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorParamTests.swift"
+"Sources/SpellbookKit/Core/ParamResolver.swift" = "Tests/SpellbookTests/Core/ParamResolverPositionalTests.swift"
+"Sources/SpellbookKit/Core/ParamSectionParser.swift" = "Tests/SpellbookTests/Core/SpellbookParserParamTests.swift"
+"Sources/SpellbookKit/Core/PathShadowValidator.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorPathTests.swift"
+"Sources/SpellbookKit/Core/ScalarListReader.swift" = "Tests/SpellbookTests/Core/SpellbookParserParamTests.swift"
+"Sources/SpellbookKit/Core/ScriptPassthrough.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorScriptTests.swift"
+"Sources/SpellbookKit/Core/ShellStateDenylist.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorPathTests.swift"
+"Sources/SpellbookKit/Core/SpellBuilder.swift" = "Tests/SpellbookTests/Core/SpellbookParserSpellTests.swift"
+"Sources/SpellbookKit/Core/SpellName.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorNameTests.swift"
+"Sources/SpellbookKit/Core/SpellRuntimeBuilder.swift" = "Tests/SpellbookTests/Core/SpellbookParserSpellTests.swift"
+"Sources/SpellbookKit/Core/SpellbookValidator.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorNameTests.swift"
+"Sources/SpellbookKit/Core/SwitchSectionParser.swift" = "Tests/SpellbookTests/Core/SpellbookParserSwitchTests.swift"
+"Sources/SpellbookKit/Core/SwitchUniqueness.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorSwitchTests.swift"
+"Sources/SpellbookKit/Core/TopLevelUniqueness.swift" = "Tests/SpellbookTests/Core/SpellbookValidatorNameTests.swift"
+"Sources/SpellbookKit/Core/UnknownPlaceholderScanner.swift" = "Tests/SpellbookTests/Core/DoctorUnknownPlaceholderTests.swift"
+"Sources/SpellbookKit/Core/YAMLParser+Scalar.swift" = "Tests/SpellbookTests/Core/YAMLParserTests.swift"
+"Sources/SpellbookKit/Core/YAMLParser+Sequence.swift" = "Tests/SpellbookTests/Core/YAMLParserTests.swift"
+"Sources/SpellbookKit/Core/YAMLQuoteScanner.swift" = "Tests/SpellbookTests/Core/YAMLTokenizerTests.swift"
+"Sources/SpellbookKit/Core/YAMLTrimmer.swift" = "Tests/SpellbookTests/Core/YAMLTokenizerTests.swift"
+"Sources/SpellbookKit/Core/ZshIntegrationScript.swift" = "Tests/SpellbookTests/Core/ShellIntegrationScriptsTests.swift"
+
+[review]
+enabled = true
+
+[instructions]
+enabled = true
+
+[journals]
+enabled = true

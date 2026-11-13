@@ -3,8 +3,6 @@ import Testing
 
 struct ListCommandTests {
 
-    // MARK: - Compact output
-
     @Test func list_compactShowsSpellNames() throws {
         let env = makeEnvironment()
         env.fileSystem.files.insert("/project/spells.yaml")
@@ -50,8 +48,6 @@ struct ListCommandTests {
         #expect(lines == ["git  [override]", "build"])
     }
 
-    // MARK: - Verbose output
-
     @Test func list_verboseIncludesDescription() throws {
         let env = makeEnvironment()
         env.fileSystem.files.insert("/project/spells.yaml")
@@ -76,8 +72,6 @@ struct ListCommandTests {
         #expect(lines == ["hello"])
     }
 
-    // MARK: - Home fallback
-
     @Test func list_homeFallback_listsSpells() throws {
         let env = makeEnvironment(home: "/Users/me")
         env.fileSystem.files.insert("/Users/me/spells.yaml")
@@ -89,8 +83,6 @@ struct ListCommandTests {
 
         #expect(lines == ["global"])
     }
-
-    // MARK: - Extends merge
 
     @Test func list_extendsChainMergesSpells() throws {
         let env = makeEnvironment()
@@ -114,8 +106,6 @@ struct ListCommandTests {
         #expect(lines.contains("shared-cmd"))
     }
 
-    // MARK: - No manifest
-
     @Test func list_noManifest_throwsError() {
         let env = makeEnvironment()
 
@@ -123,8 +113,6 @@ struct ListCommandTests {
             try makeCommand(env, verbose: false).run(cwd: "/nowhere")
         }
     }
-
-    // MARK: - Empty manifest
 
     @Test func list_emptyManifest_showsMessage() throws {
         let env = makeEnvironment()
@@ -135,8 +123,6 @@ struct ListCommandTests {
 
         #expect(lines == ["No spells defined."])
     }
-
-    // MARK: - Helpers
 
     private struct TestEnvironment {
         let fileSystem: MockFileSystem

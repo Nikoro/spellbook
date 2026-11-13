@@ -14,8 +14,6 @@ struct InteractivePickerTests {
         return term
     }
 
-    // MARK: - Arrow keys
-
     @Test func arrowDownMovesSelection() throws {
         let term = terminal([0x1B, 0x5B, 0x42, 0x0D])
         let result = try InteractivePicker.pick(
@@ -33,7 +31,6 @@ struct InteractivePickerTests {
     }
 
     @Test func arrowDownWrapsToFirst() throws {
-        // Down 3 times wraps: 0→1→2→0
         let down: [UInt8] = [0x1B, 0x5B, 0x42]
         let term = terminal(down + down + down + [0x0D])
         let result = try InteractivePicker.pick(
@@ -41,8 +38,6 @@ struct InteractivePickerTests {
         )
         #expect(result == .selected(0))
     }
-
-    // MARK: - j/k keys
 
     @Test func jMovesDown() throws {
         let term = terminal([0x6A, 0x0D])
@@ -60,8 +55,6 @@ struct InteractivePickerTests {
         #expect(result == .selected(2))
     }
 
-    // MARK: - Enter
-
     @Test func enterConfirmsInitialSelection() throws {
         let term = terminal([0x0D])
         let result = try InteractivePicker.pick(
@@ -69,8 +62,6 @@ struct InteractivePickerTests {
         )
         #expect(result == .selected(0))
     }
-
-    // MARK: - Cancel
 
     @Test func escCancels() throws {
         let term = terminal([0x1B])
@@ -88,10 +79,8 @@ struct InteractivePickerTests {
         #expect(result == .cancelled)
     }
 
-    // MARK: - Direct numeric selection
-
     @Test func digitSelectsDirectly() throws {
-        let term = terminal([0x32]) // '2'
+        let term = terminal([0x32])
         let result = try InteractivePicker.pick(
             options: options, prompt: "Pick:", terminal: term
         )
@@ -99,14 +88,12 @@ struct InteractivePickerTests {
     }
 
     @Test func digitOutOfRangeIgnored() throws {
-        let term = terminal([0x39, 0x0D]) // '9' then Enter
+        let term = terminal([0x39, 0x0D])
         let result = try InteractivePicker.pick(
             options: options, prompt: "Pick:", terminal: term
         )
         #expect(result == .selected(0))
     }
-
-    // MARK: - Edge cases
 
     @Test func emptyOptionsReturnsCancelled() throws {
         let term = terminal([])

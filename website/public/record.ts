@@ -25,8 +25,6 @@ await page.goto(URL, { waitUntil: 'networkidle' });
 const target = page.locator(TARGET_SELECTOR);
 await target.waitFor({ state: 'visible', timeout: 10_000 });
 
-// Sync recording start with the beginning of step 1 so the loop closes cleanly.
-// We wait for any non-1 step (proves the loop is running), then for step 1 to come back.
 console.log('Syncing to start of cycle (step 1)…');
 await page.waitForFunction(
   () => document.querySelector<HTMLElement>('[data-demo-window]')?.dataset.demoStep !== '1',
@@ -38,7 +36,6 @@ await page.waitForFunction(
   null,
   { timeout: 60_000 },
 );
-// Let the step 1 cross-fade settle so the very first frame is fully step 1.
 await page.waitForTimeout(600);
 console.log('Cycle is at step 1, beginning recording.');
 

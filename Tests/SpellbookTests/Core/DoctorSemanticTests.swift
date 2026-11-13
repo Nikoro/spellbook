@@ -6,8 +6,6 @@ struct DoctorSemanticTests {
     private let resolver = DoctorResolver()
     private let binDir = "/Users/me/.spellbook/bin"
 
-    // MARK: - Path shadowing
-
     @Test func spellShadowsPath_producesWarning() {
         let manifest = SpellbookManifest(spells: [
             SpellDefinition(name: "git", script: "echo")
@@ -31,8 +29,6 @@ struct DoctorSemanticTests {
         let shadowWarnings = semanticWarnings(from: report).filter { $0.message.contains("Shadowing") }
         #expect(shadowWarnings.isEmpty)
     }
-
-    // MARK: - Override without placeholder
 
     @Test func overrideWithoutPlaceholder_producesWarning() {
         let manifest = SpellbookManifest(spells: [
@@ -60,8 +56,6 @@ struct DoctorSemanticTests {
         let overrideWarnings = semanticWarnings(from: report).filter { $0.message.contains("Override") }
         #expect(overrideWarnings.isEmpty)
     }
-
-    // MARK: - Unused params
 
     @Test func unusedParam_producesWarning() {
         let manifest = SpellbookManifest(spells: [
@@ -94,8 +88,6 @@ struct DoctorSemanticTests {
         let paramWarnings = semanticWarnings(from: report).filter { $0.message.contains("Param") }
         #expect(paramWarnings.isEmpty)
     }
-
-    // MARK: - Case collisions
 
     @Test func caseCollision_producesWarning() {
         let manifest = SpellbookManifest(spells: [
@@ -130,8 +122,6 @@ struct DoctorSemanticTests {
         #expect(caseWarnings.isEmpty)
     }
 
-    // MARK: - All semantic issues are warnings
-
     @Test func semanticIssuesAreAlwaysWarnings() {
         let manifest = SpellbookManifest(spells: [
             SpellDefinition(name: "git", script: "echo"),
@@ -147,8 +137,6 @@ struct DoctorSemanticTests {
             #expect(item.severity == .warning, "Expected warning but got \(item.severity) for: \(item.message)")
         }
     }
-
-    // MARK: - Helpers
 
     private func diagnose(
         manifest: SpellbookManifest,

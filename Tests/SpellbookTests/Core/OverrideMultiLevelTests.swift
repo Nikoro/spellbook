@@ -3,8 +3,6 @@ import Testing
 
 struct OverrideMultiLevelTests {
 
-    // MARK: - Multi-level overrides resolve external binaries
-
     @Test func overridePlaceholder_resolvesToExternalBinary() throws {
         let resolved = try resolveThreeLevelChain(
             grandparentSpell: SpellDefinition(
@@ -75,8 +73,6 @@ struct OverrideMultiLevelTests {
             .validate(resolved)
         #expect(errors == [.spellIsShellStateBuiltin(spell: "eval")])
     }
-
-    // MARK: - Helpers
 
     private struct FakeLookup: OverrideLookup {
         let results: [String: String]

@@ -3,8 +3,6 @@ import Testing
 
 struct TerminalCapabilityResolverTests {
 
-    // MARK: - TTY detection
-
     @Test func tty_enablesAllCapabilities() {
         let caps = TerminalCapabilityResolver.resolve(
             isTTY: true, noColorValue: nil, termValue: "xterm-256color"
@@ -25,8 +23,6 @@ struct TerminalCapabilityResolverTests {
         #expect(caps.supportsRawMode == false)
     }
 
-    // MARK: - NO_COLOR
-
     @Test func noColor_set_disablesColor() {
         let caps = TerminalCapabilityResolver.resolve(
             isTTY: true, noColorValue: "", termValue: "xterm-256color"
@@ -44,8 +40,6 @@ struct TerminalCapabilityResolverTests {
 
         #expect(caps.supportsColor == false)
     }
-
-    // MARK: - TERM=dumb
 
     @Test func termDumb_disablesColorAndRawMode() {
         let caps = TerminalCapabilityResolver.resolve(
@@ -66,8 +60,6 @@ struct TerminalCapabilityResolverTests {
         #expect(caps.supportsRawMode)
     }
 
-    // MARK: - Combined degradation
-
     @Test func nonTTY_ignoresTermAndNoColor() {
         let caps = TerminalCapabilityResolver.resolve(
             isTTY: false, noColorValue: nil, termValue: nil
@@ -85,8 +77,6 @@ struct TerminalCapabilityResolverTests {
         #expect(caps.supportsColor == false)
         #expect(caps.supportsRawMode == false)
     }
-
-    // MARK: - withRawMode scoped restoration
 
     @Test func withRawMode_restoresOnNormalCompletion() throws {
         let terminal = MockTerminal(capabilities: ttyCapabilities())
@@ -117,8 +107,6 @@ struct TerminalCapabilityResolverTests {
         }
         #expect(terminal.rawModeRestored == false)
     }
-
-    // MARK: - Helpers
 
     private func ttyCapabilities() -> TerminalCapabilities {
         TerminalCapabilities(

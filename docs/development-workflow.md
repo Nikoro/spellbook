@@ -33,6 +33,7 @@ Do not refactor unrelated files while doing this pass.
 
 ## Documentation Changes
 
-Keep `CLAUDE.md` as an index only. Put durable agent guidance in `docs/`, product shape changes in `docs/architecture.md`, behavior decisions in `docs/product-decisions.md`, and sequencing/status changes in `docs/roadmap.md` or `docs/project-status.md`.
+Keep `AGENTS.md` as an index only and `CLAUDE.md` as its single import. Put durable agent guidance in `docs/`, product shape changes in `docs/architecture.md`, behavior decisions in `docs/product-decisions.md`, and pending work in `docs/roadmap.md` and repeatable validation guidance in `docs/verification.md`.
 
 Repo Markdown is written in English.
+Source code and CLI output are English too; conversation may be Polish or English.

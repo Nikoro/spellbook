@@ -17,15 +17,11 @@ final class StateFileTests {
         try? FileManager.default.removeItem(atPath: tempDir)
     }
 
-    // MARK: - Missing file
-
     @Test func read_missingFile_returnsNil() throws {
         let store = StateFile(path: tempDir + "/state.json")
         let result = try store.read()
         #expect(result == nil)
     }
-
-    // MARK: - Round-trip
 
     @Test func writeAndRead_roundTrips() throws {
         let path = tempDir + "/state.json"
@@ -49,8 +45,6 @@ final class StateFileTests {
         #expect(loaded == snapshot)
     }
 
-    // MARK: - Atomic overwrite
-
     @Test func write_overwritesExistingFile() throws {
         let path = tempDir + "/state.json"
         let store = StateFile(path: path)
@@ -64,8 +58,6 @@ final class StateFileTests {
         #expect(loaded?.updatedAt == "2026-04-13T11:00:00Z")
     }
 
-    // MARK: - Version check
-
     @Test func read_unsupportedVersion_throws() throws {
         let path = tempDir + "/state.json"
         let json = """
@@ -78,8 +70,6 @@ final class StateFileTests {
             try store.read()
         }
     }
-
-    // MARK: - Creates directory
 
     @Test func write_createsParentDirectory() throws {
         let path = tempDir + "/nested/deep/state.json"

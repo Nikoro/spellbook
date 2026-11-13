@@ -57,8 +57,6 @@ enum ErrorReporterCommand {
         }
     }
 
-    // MARK: - Resolution errors (4 cases)
-
     private static func renderResolution(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -91,8 +89,6 @@ enum ErrorReporterCommand {
         }
     }
 
-    // MARK: - Execution & state errors (3 cases)
-
     private static func renderExec(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -114,8 +110,6 @@ enum ErrorReporterCommand {
             return nil
         }
     }
-
-    // MARK: - CLI command errors (4 cases)
 
     private static func renderCLI(
         _ error: SpellbookError

@@ -3,8 +3,6 @@ import Testing
 
 struct RunCommandTests {
 
-    // MARK: - Argument parsing
-
     @Test func parse_extractsSpellNameCwdAndArgv() throws {
         let parsed = try RunCommand.parseArguments(["hello", "--cwd", "/project", "--", "arg1", "arg2"])
         #expect(parsed.spellName == "hello")
@@ -42,8 +40,6 @@ struct RunCommandTests {
             try RunCommand.parseArguments(["hello", "--cwd"])
         }
     }
-
-    // MARK: - Dispatch
 
     @Test func run_dispatchesToResolverAndExecutor() throws {
         let env = makeEnvironment(spell: "hello", script: "echo hi", cwd: "/project")
@@ -83,8 +79,6 @@ struct RunCommandTests {
         let inv = try #require(env.runner.invocations.first)
         #expect(inv.arguments[2].contains("Alice"))
     }
-
-    // MARK: - Helpers
 
     private struct TestEnvironment {
         let fileSystem: MockFileSystem

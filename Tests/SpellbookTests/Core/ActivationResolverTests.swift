@@ -3,8 +3,6 @@ import Testing
 
 struct ActivationResolverTests {
 
-    // MARK: - Successful activation
-
     @Test func projectManifest_resolvesWithProjectSource() throws {
         let deps = makeDeps()
         deps.fileSystem.files.insert("/project/spells.yaml")
@@ -28,8 +26,6 @@ struct ActivationResolverTests {
 
         #expect(result.location.source == .homeFallback)
     }
-
-    // MARK: - Extends chain
 
     @Test func extendsChain_includesParentAndChild() throws {
         let deps = makeDeps()
@@ -80,8 +76,6 @@ struct ActivationResolverTests {
         #expect(result.chain == ["/project/spells.yaml"])
     }
 
-    // MARK: - Validation failures
-
     @Test func validationFailure_throwsBeforeResult() throws {
         let deps = makeDeps()
         deps.fileSystem.files.insert("/project/spells.yaml")
@@ -94,8 +88,6 @@ struct ActivationResolverTests {
         }
     }
 
-    // MARK: - No manifest
-
     @Test func noManifest_throws() {
         let deps = makeDeps()
 
@@ -103,8 +95,6 @@ struct ActivationResolverTests {
             try makeResolver(deps).resolve(cwd: "/empty")
         }
     }
-
-    // MARK: - Helpers
 
     private struct Deps {
         let fileSystem: MockFileSystem

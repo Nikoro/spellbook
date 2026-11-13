@@ -6,8 +6,6 @@ struct DoctorResolverTests {
     private let resolver = DoctorResolver()
     private let binDir = "/Users/me/.spellbook/bin"
 
-    // MARK: - Manifest checks
-
     @Test func validManifest_producesInfoItem() {
         let result = makeResult(spellCount: 2, path: "/project/spells.yaml")
         let report = diagnose(result: result, pathEnv: binDir + ":/usr/bin")
@@ -40,8 +38,6 @@ struct DoctorResolverTests {
         #expect(warnings[0].message.contains(".spells.yaml"))
     }
 
-    // MARK: - Extends checks
-
     @Test func extendsChain_reportsChain() {
         let result = makeResult(
             spellCount: 1, path: "/project/spells.yaml",
@@ -60,8 +56,6 @@ struct DoctorResolverTests {
         let items = report.items.filter { $0.category == .extends }
         #expect(items.isEmpty)
     }
-
-    // MARK: - PATH checks
 
     @Test func pathContainsBinDir_producesInfo() {
         let result = makeResult(spellCount: 0, path: "/p/spells.yaml")
@@ -86,8 +80,6 @@ struct DoctorResolverTests {
         let items = report.items.filter { $0.category == .path }
         #expect(items[0].severity == .error)
     }
-
-    // MARK: - Helpers
 
     private func diagnose(
         result: ActivationResult? = nil,

@@ -5,8 +5,6 @@ private typealias Fix = WrapperCompletionTestFixtures
 
 struct WrapperCompletionResolverTests {
 
-    // MARK: FR-40 — trigger rules
-
     @Test func completeCommand_noTrailingSpace_returnsFallthrough() {
         let book = Fix.manifest([Fix.spell("hello")])
         let out = Fix.resolve(book, wrapper: "hello", tokens: ["hello"], cword: 0)
@@ -52,8 +50,6 @@ struct WrapperCompletionResolverTests {
         let out = Fix.resolve(book, wrapper: "x", tokens: ["x", "st"], cword: 1)
         #expect(out.map(\.value) == ["staging", "prod", "dev"])
     }
-
-    // MARK: FR-41 — required-first
 
     @Test func requiredPositionalUnsatisfied_hidesOptionalCandidates() {
         let required = Fix.requiredEnumParam(name: "env", values: ["staging", "prod"])

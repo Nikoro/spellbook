@@ -78,9 +78,9 @@ public enum InteractivePicker {
         switch byte {
         case 0x1B: return readEscape(from: terminal)
         case 0x0D, 0x0A: return .confirm
-        case 0x71: return .cancel   // q
-        case 0x6A: return .moveDown // j
-        case 0x6B: return .moveUp   // k
+        case 0x71: return .cancel
+        case 0x6A: return .moveDown
+        case 0x6B: return .moveUp
         case 0x31...0x39: return .digit(Int(byte) - 0x30)
         default: return .unknown
         }
@@ -94,8 +94,8 @@ public enum InteractivePicker {
             return .cancel
         }
         switch arrow {
-        case 0x41: return .moveUp   // ESC [ A
-        case 0x42: return .moveDown // ESC [ B
+        case 0x41: return .moveUp
+        case 0x42: return .moveDown
         default: return .unknown
         }
     }

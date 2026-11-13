@@ -15,10 +15,6 @@ fi
 
 echo "Spellbook quality gate: swift test"
 
-# On Linux, `swift test` intermittently hangs while running the XCTest bundle.
-# Workaround: build the test binary once, then run every test suite in its own
-# process with a short timeout. On hang we retry once. macOS can use the
-# upstream `swift test` path.
 if [[ "$(uname -s)" != "Linux" ]]; then
   swift test
   exit 0

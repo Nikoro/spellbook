@@ -14,8 +14,6 @@ enum ErrorReporterNaming {
         )
     }
 
-    // MARK: - Structure errors (5 cases)
-
     private static func renderStructure(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -50,8 +48,6 @@ enum ErrorReporterNaming {
         }
     }
 
-    // MARK: - Name validation errors (4 cases)
-
     private static func renderNames(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -85,8 +81,6 @@ enum ErrorReporterNaming {
             return nil
         }
     }
-
-    // MARK: - Duplicate/uniqueness errors (4 cases)
 
     private static func renderDuplicates(
         _ error: SpellbookError

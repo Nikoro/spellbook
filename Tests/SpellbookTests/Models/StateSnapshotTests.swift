@@ -4,8 +4,6 @@ import Testing
 
 struct StateSnapshotTests {
 
-    // MARK: - Round-trip encoding
-
     @Test func emptySnapshot_roundTrips() throws {
         let snapshot = StateSnapshot(updatedAt: "2026-04-13T10:30:00Z")
         let decoded = try roundTrip(snapshot)
@@ -27,8 +25,6 @@ struct StateSnapshotTests {
         #expect(snapshot.version == 1)
     }
 
-    // MARK: - JSON key format
-
     @Test func snakeCase_keysInJSON() throws {
         let snapshot = StateSnapshot(
             updatedAt: "2026-04-13T10:30:00Z",
@@ -40,8 +36,6 @@ struct StateSnapshotTests {
         #expect(json.contains("\"updatedAt\"") == false)
         #expect(json.contains("\"spellsYamlHash\"") == false)
     }
-
-    // MARK: - Stable hash inputs
 
     @Test func projectState_equalityIgnoresKeyOrder() {
         let spellsA: [String: SpellState] = [
@@ -56,8 +50,6 @@ struct StateSnapshotTests {
         let projectB = ProjectState(spellsYamlHash: "sha256:x", chain: ["/p"], spells: spellsB)
         #expect(projectA == projectB)
     }
-
-    // MARK: - Helpers
 
     private func sampleProject() -> ProjectState {
         ProjectState(

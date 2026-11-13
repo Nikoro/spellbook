@@ -5,8 +5,6 @@ struct SpellLookupTests {
 
     private let lookup = SpellLookup()
 
-    // MARK: - Canonical name
-
     @Test func findByCanonicalName() {
         let manifest = SpellbookManifest(spells: [
             SpellDefinition(name: "build", script: "swift build"),
@@ -15,8 +13,6 @@ struct SpellLookupTests {
         let result = lookup.find(name: "build", in: manifest)
         #expect(result?.name == "build")
     }
-
-    // MARK: - Alias
 
     @Test func findByAlias() {
         let manifest = SpellbookManifest(spells: [
@@ -29,16 +25,12 @@ struct SpellLookupTests {
         #expect(result?.name == "build")
     }
 
-    // MARK: - Not found
-
     @Test func notFound_returnsNil() {
         let manifest = SpellbookManifest(spells: [
             SpellDefinition(name: "build", script: "swift build")
         ])
         #expect(lookup.find(name: "deploy", in: manifest) == nil)
     }
-
-    // MARK: - Canonical takes precedence over alias
 
     @Test func canonicalNameMatchesBeforeAlias() {
         let manifest = SpellbookManifest(spells: [
@@ -54,8 +46,6 @@ struct SpellLookupTests {
         let result = lookup.find(name: "b", in: manifest)
         #expect(result?.script == "second")
     }
-
-    // MARK: - Empty manifest
 
     @Test func emptyManifest_returnsNil() {
         let manifest = SpellbookManifest(spells: [])

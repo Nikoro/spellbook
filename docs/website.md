@@ -86,3 +86,18 @@ These were intentionally out of scope for the launch. Add only when there is a c
 - **A dedicated `/comparison` docs page.** The landing page contains a comparison section.
 - **Demo video as `.webm`/`.mp4`.** The hero currently uses an animated CSS demo (`data-demo-step` sequence in `src/pages/index.astro`); a recorded video is a possible future replacement, not a regression to fix.
 - **Reuse of internal `docs/*.md` files** (`product-decisions.md`, `roadmap.md`, etc.) as user-facing content. Those remain internal specifications; site documentation is freshly written for the end user.
+
+## Asset and content generation
+
+`website/scripts/optimize-assets.mjs` derives a roughly 960px wordmark, 256px icon,
+32px PNG favicon and 1200x630 social card from the repository artwork. The favicon
+contains PNG bytes under an `.ico` name; use a real ICO encoder if multiple sizes
+are required. `generate-demo-poster.mjs` provides the temporary 1280x720 poster;
+replace it with a real video frame before launch.
+
+The recorder waits for the demo to leave step 1 and return to it, then lets the
+cross-fade settle. This aligns the first frame with the loop boundary.
+
+The content-publishing integration mirrors documentation as raw Markdown, builds
+`llms.txt` and `llms-full.txt` in sidebar order, and imports the root changelog
+into the site collection and raw Markdown output.

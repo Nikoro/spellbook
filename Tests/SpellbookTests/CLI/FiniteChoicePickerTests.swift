@@ -4,8 +4,6 @@ import Testing
 struct FiniteChoicePickerTests {
     private let options = ["alpha", "beta", "gamma"]
 
-    // MARK: - Non-TTY
-
     @Test func nonTTYReturnsUnavailable() throws {
         let caps = TerminalCapabilities(
             isTTY: false,
@@ -31,8 +29,6 @@ struct FiniteChoicePickerTests {
         )
         #expect(term.writtenLines.isEmpty)
     }
-
-    // MARK: - Dumb terminal
 
     @Test func dumbTerminalUsesNumberedPicker() throws {
         let caps = TerminalCapabilities(
@@ -64,8 +60,6 @@ struct FiniteChoicePickerTests {
         #expect(term.writtenLines.contains("  1) alpha"))
     }
 
-    // MARK: - Normal TTY
-
     @Test func normalTTYDelegatesToInteractivePicker() throws {
         let caps = TerminalCapabilities(
             isTTY: true,
@@ -88,14 +82,12 @@ struct FiniteChoicePickerTests {
             supportsRawMode: true
         )
         let term = MockTerminal(capabilities: caps)
-        term.inputBytes = [0x71] // q
+        term.inputBytes = [0x71]
         let result = try FiniteChoicePicker.pick(
             options: options, prompt: "Pick:", terminal: term
         )
         #expect(result == .cancelled)
     }
-
-    // MARK: - Empty options
 
     @Test func emptyOptionsReturnsCancelled() throws {
         let caps = TerminalCapabilities(

@@ -2,7 +2,7 @@ import CryptoKit
 import Foundation
 
 public enum ManifestCacheCodec {
-    public static let magic: [UInt8] = [0x53, 0x42, 0x4D, 0x43] // "SBMC"
+    public static let magic: [UInt8] = [0x53, 0x42, 0x4D, 0x43]
     public static let currentFormatVersion: UInt16 = 1
 
     public static func encode(manifest: SpellbookManifest, extendsChain: [String]) -> Data {

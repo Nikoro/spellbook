@@ -4,8 +4,6 @@ import Testing
 
 struct ManifestCacheWriterFileTests {
 
-    // MARK: helpers
-
     private func makeWriter(root: String) -> ManifestCacheWriterAdapter {
         ManifestCacheWriterAdapter(spellbookHome: root)
     }
@@ -18,8 +16,6 @@ struct ManifestCacheWriterFileTests {
     private func makeManifest() -> SpellbookManifest {
         SpellbookManifest(spells: [SpellDefinition(name: "hello", script: "echo hi")])
     }
-
-    // MARK: happy path
 
     @Test func writeIfPossible_writesReadableArtifact() throws {
         let home = tempHome()
@@ -74,16 +70,11 @@ struct ManifestCacheWriterFileTests {
         let decoded = try #require(ManifestCacheCodec.decode(data))
         #expect(decoded.merged == manifest2)
 
-        // No stale temp file left behind.
         #expect(!FileManager.default.fileExists(atPath: expectedPath + ".tmp"))
     }
 
-    // MARK: best-effort
-
     @Test func writeIfPossible_swallowsErrors_whenPathIsUnwritable() {
-        // Use an unwritable path (root-owned directory).
         let writer = makeWriter(root: "/dev/null/unwritable")
-        // Must not throw.
         writer.writeIfPossible(
             merged: makeManifest(),
             extendsChain: [],

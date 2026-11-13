@@ -15,8 +15,6 @@ enum ErrorReporterArgs {
         )
     }
 
-    // MARK: - Argument parsing errors (4 cases)
-
     private static func renderParsing(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -50,8 +48,6 @@ enum ErrorReporterArgs {
             return nil
         }
     }
-
-    // MARK: - Invalid value error (1 case)
 
     private static func renderValue(
         _ error: SpellbookError

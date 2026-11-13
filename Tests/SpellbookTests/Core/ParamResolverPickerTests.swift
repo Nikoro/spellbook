@@ -3,8 +3,6 @@ import Testing
 
 struct ParamResolverPickerTests {
 
-    // MARK: - Enum positional picker
-
     @Test func missingRequiredEnum_pickerSelects() throws {
         let provider = MockChoiceProvider()
         provider.outcome = .selected(1)
@@ -50,8 +48,6 @@ struct ParamResolverPickerTests {
         )
     }
 
-    // MARK: - Enum named picker
-
     @Test func missingRequiredNamedEnum_pickerSelects() throws {
         let provider = MockChoiceProvider()
         provider.outcome = .selected(0)
@@ -66,8 +62,6 @@ struct ParamResolverPickerTests {
 
         #expect(result.values["env"] == "dev")
     }
-
-    // MARK: - Bool never triggers picker
 
     @Test func missingRequiredBool_pickerNotCalled() {
         let provider = MockChoiceProvider()
@@ -86,8 +80,6 @@ struct ParamResolverPickerTests {
         }
         #expect(provider.callCount == 0)
     }
-
-    // MARK: - Free-text never triggers picker
 
     @Test func missingRequiredString_pickerNotCalled() {
         let provider = MockChoiceProvider()
@@ -125,8 +117,6 @@ struct ParamResolverPickerTests {
         #expect(provider.callCount == 0)
     }
 
-    // MARK: - Provided enum skips picker
-
     @Test func enumProvidedByArg_pickerNotCalled() throws {
         let provider = MockChoiceProvider()
         let resolver = ParamResolver(choiceProvider: provider)
@@ -139,8 +129,6 @@ struct ParamResolverPickerTests {
         #expect(result.values["env"] == "dev")
         #expect(provider.callCount == 0)
     }
-
-    // MARK: - Helpers
 
     private func enumParam(
         name: String,

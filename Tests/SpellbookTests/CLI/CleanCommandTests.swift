@@ -3,8 +3,6 @@ import Testing
 
 struct CleanCommandTests {
 
-    // MARK: - Argument parsing
-
     @Test func parseScope_named() throws {
         #expect(try CleanCommand.parseScope(["build"]) == .named("build"))
     }
@@ -28,8 +26,6 @@ struct CleanCommandTests {
             try CleanCommand.parseScope(["--bogus"])
         }
     }
-
-    // MARK: - Run
 
     @Test func clean_named_removesWrapperAndForgetsSpell() throws {
         let env = makeEnvironment()
@@ -139,8 +135,6 @@ struct CleanCommandTests {
 
         #expect(lines == ["Nothing to clean."])
     }
-
-    // MARK: - Helpers
 
     private struct TestEnvironment {
         let fileSystem: MockFileSystem

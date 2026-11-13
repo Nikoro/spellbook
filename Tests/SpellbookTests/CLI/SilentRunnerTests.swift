@@ -3,8 +3,6 @@ import Testing
 
 struct SilentRunnerTests {
 
-    // MARK: - US-007A: Success path
-
     @Test func silentSuccess_discardsOutput() throws {
         let sut = makeSUT(tty: true)
 
@@ -24,8 +22,6 @@ struct SilentRunnerTests {
         #expect(sut.terminal.cursorHidden == false)
         #expect(sut.terminal.linesCleared >= 1)
     }
-
-    // MARK: - US-007A: Spinner label
 
     @Test func customLabel_usedInOutput() throws {
         let sut = makeSUT(tty: true)
@@ -50,8 +46,6 @@ struct SilentRunnerTests {
         assertContains(sut.terminal.writtenLines, "✓ build")
     }
 
-    // MARK: - US-007D: Non-TTY passthrough
-
     @Test func nonTTY_streamsNormally() throws {
         let sut = makeSUT(tty: false)
 
@@ -71,8 +65,6 @@ struct SilentRunnerTests {
         #expect(sut.terminal.writtenLines.isEmpty)
     }
 
-    // MARK: - US-007D: Label uses invocation path
-
     @Test func spinnerLabel_usesSpellName() throws {
         let sut = makeSUT(tty: true)
 
@@ -83,8 +75,6 @@ struct SilentRunnerTests {
         let spinner = sut.terminal.written.first ?? ""
         #expect(spinner.contains("deploy"))
     }
-
-    // MARK: - Launch failure
 
     @Test func launchFailure_restoresCursor() {
         let cap = MockCapturingRunner()
@@ -104,8 +94,6 @@ struct SilentRunnerTests {
         #expect(sut.terminal.cursorHidden == false)
     }
 }
-
-// MARK: - Helpers
 
 extension SilentRunnerTests {
     struct SUT {

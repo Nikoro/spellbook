@@ -5,8 +5,6 @@ private typealias Fix = WrapperCompletionTestFixtures
 
 struct WrapperCompletionGrammarTests {
 
-    // MARK: switch (flat / nested)
-
     @Test func flatSwitch_emitsOptionNames() {
         let optA = SwitchOptionDefinition(name: "build", command: Fix.spell("build"))
         let optB = SwitchOptionDefinition(name: "deploy", command: Fix.spell("deploy"))
@@ -31,8 +29,6 @@ struct WrapperCompletionGrammarTests {
         let out = Fix.resolve(book, wrapper: "sb", tokens: ["sb", "deploy", ""], cword: 2)
         #expect(out.map(\.value) == ["staging", "prod"])
     }
-
-    // MARK: bool / enum / string / named flag with value
 
     @Test func boolPositional_offersTrueFalse() {
         let param = ParamDefinition(
@@ -82,8 +78,6 @@ struct WrapperCompletionGrammarTests {
         let verbose = out.first { $0.value == "--verbose" }
         #expect(verbose?.needsValueNext == false)
     }
-
-    // MARK: FR-51
 
     @Test func unknownWrapper_emitsEmptyBell() {
         let book = Fix.manifest([Fix.spell("hello")])

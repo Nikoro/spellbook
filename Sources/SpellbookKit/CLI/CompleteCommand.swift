@@ -35,8 +35,6 @@ public struct CompleteCommand {
         reader: ManifestCacheReaderAdapter,
         cwd: String
     ) -> SpellbookManifest? {
-        // Without a successful resolve we cannot compute the project path —
-        // best-effort: inspect common manifest names in cwd.
         let candidates = [cwd + "/spells.yaml", cwd + "/.spells.yaml"]
         for path in candidates {
             if let decoded = reader.readAnyCache(projectRootManifestPath: path) {

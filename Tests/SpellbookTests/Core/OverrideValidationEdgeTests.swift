@@ -3,8 +3,6 @@ import Testing
 
 struct OverrideValidationEdgeTests {
 
-    // MARK: - Shell-state builtin edge cases
-
     @Test func aliasIsBuiltin_withOverride_isStillRejected() {
         let checker = MockPathBinaryChecker(binaries: [])
         let validator = SpellbookValidator(pathChecker: checker)
@@ -36,8 +34,6 @@ struct OverrideValidationEdgeTests {
         #expect(errors.count == 2)
     }
 
-    // MARK: - Free names
-
     @Test func freeNameWithOverride_isValid() {
         let checker = MockPathBinaryChecker(binaries: ["git"])
         let validator = SpellbookValidator(pathChecker: checker)
@@ -50,8 +46,6 @@ struct OverrideValidationEdgeTests {
         ])
         #expect(validator.validate(manifest) == [])
     }
-
-    // MARK: - Path shadow + alias combinations
 
     @Test func multipleAliases_oneShadowsPath_reportsOnlyThat() {
         let checker = MockPathBinaryChecker(binaries: ["ls"])
@@ -95,8 +89,6 @@ struct OverrideValidationEdgeTests {
         #expect(errors.contains(.aliasShadowsPathBinary(spell: "git", alias: "g")))
     }
 
-    // MARK: - Builtin precedence over path shadow
-
     @Test func spellIsBuiltin_alsoInPath_reportsOnlyBuiltinError() {
         let checker = MockPathBinaryChecker(binaries: ["eval"])
         let validator = SpellbookValidator(pathChecker: checker)
@@ -124,8 +116,6 @@ struct OverrideValidationEdgeTests {
         #expect(errors.contains(.aliasIsShellStateBuiltin(spell: "jump", alias: "cd")))
         #expect(errors.contains(.aliasShadowsPathBinary(spell: "jump", alias: "cd")) == false)
     }
-
-    // MARK: - Param shadows override spell name
 
     @Test func overrideSpell_hyphenatedName_underscoreParam_noCollision() {
         let spell = SpellDefinition(

@@ -1,6 +1,4 @@
 #!/bin/sh
-# Render homebrew/spellbook.rb for a specific release tag.
-# Usage: homebrew/bump.sh v1.0.0 > Formula/spellbook.rb
 set -eu
 
 if [ "$#" -ne 1 ]; then

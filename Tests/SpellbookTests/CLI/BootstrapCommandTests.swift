@@ -6,11 +6,9 @@ struct BootstrapCommandTests {
     private let binDir = "/Users/me/.spellbook/bin"
     private let home = "/Users/me"
 
-    // MARK: - Interactive accept
-
     @Test func accept_writesRcFileWithMarker() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x79] // 'y'
+        env.terminal.inputBytes = [0x79]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -21,7 +19,7 @@ struct BootstrapCommandTests {
 
     @Test func accept_default_writesRcFile() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x0A] // Enter (default yes)
+        env.terminal.inputBytes = [0x0A]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -30,7 +28,7 @@ struct BootstrapCommandTests {
 
     @Test func accept_printsSourceInstructions() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x79] // 'y'
+        env.terminal.inputBytes = [0x79]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -39,11 +37,9 @@ struct BootstrapCommandTests {
         #expect(output.contains(".zshrc"))
     }
 
-    // MARK: - Interactive decline
-
     @Test func decline_doesNotWriteFile() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x6E] // 'n'
+        env.terminal.inputBytes = [0x6E]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -52,7 +48,7 @@ struct BootstrapCommandTests {
 
     @Test func decline_printsManualInstructions() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x6E] // 'n'
+        env.terminal.inputBytes = [0x6E]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -60,8 +56,6 @@ struct BootstrapCommandTests {
         #expect(output.contains("Add this to your shell config"))
         #expect(output.contains("eval \"$(spells init zsh)\""))
     }
-
-    // MARK: - Non-TTY
 
     @Test func nonTTY_doesNotWriteFile() {
         let env = makeEnvironment(isTTY: false)
@@ -79,8 +73,6 @@ struct BootstrapCommandTests {
         let output = env.terminal.writtenLines.joined(separator: "\n")
         #expect(output.contains("Add this to your shell config"))
     }
-
-    // MARK: - Already configured
 
     @Test func alreadyInPath_noOutput() {
         let env = makeEnvironment(isTTY: true)
@@ -101,11 +93,9 @@ struct BootstrapCommandTests {
         #expect(env.writer.writtenFiles.isEmpty)
     }
 
-    // MARK: - Fish
-
     @Test func fish_usesCorrectRcPath() {
         let env = makeEnvironment(isTTY: true)
-        env.terminal.inputBytes = [0x79] // 'y'
+        env.terminal.inputBytes = [0x79]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/fish").run()
 
@@ -113,12 +103,10 @@ struct BootstrapCommandTests {
         #expect(written.contains("spells init fish | source"))
     }
 
-    // MARK: - Append preserves existing content
-
     @Test func appendPreservesExistingContent() {
         let env = makeEnvironment(isTTY: true)
         env.reader.contents["/Users/me/.zshrc"] = "export FOO=bar\n"
-        env.terminal.inputBytes = [0x79] // 'y'
+        env.terminal.inputBytes = [0x79]
 
         makeCommand(env, pathEnv: "/usr/bin", shell: "/bin/zsh").run()
 
@@ -126,8 +114,6 @@ struct BootstrapCommandTests {
         #expect(written.hasPrefix("export FOO=bar\n"))
         #expect(written.contains("# spellbook"))
     }
-
-    // MARK: - Helpers
 
     private final class Environment {
         let terminal: MockTerminal

@@ -3,16 +3,12 @@ import Testing
 
 struct FuzzyPickerStateTests {
 
-    // MARK: initial state
-
     @Test func emptyQuery_showsAllCandidates() {
         let state = FuzzyPickerState(candidates: ["alpha", "beta", "gamma"])
         #expect(state.visible.map(\.candidate) == ["alpha", "beta", "gamma"])
         #expect(state.selectedIndex == 0)
         #expect(state.query.isEmpty)
     }
-
-    // MARK: typing
 
     @Test func typingCharacter_narrowsCandidates() {
         var state = FuzzyPickerState(candidates: ["alpha", "one", "gamma"])
@@ -38,8 +34,6 @@ struct FuzzyPickerStateTests {
         #expect(state.selectedIndex == 0)
     }
 
-    // MARK: digit direct-select vs query
-
     @Test func digitDirectSelects_whenQueryEmpty() {
         var state = FuzzyPickerState(candidates: ["a", "b", "c"])
         let outcome = state.apply(.digit(2))
@@ -53,8 +47,6 @@ struct FuzzyPickerStateTests {
         #expect(outcome == .pending)
         #expect(state.query == "a1")
     }
-
-    // MARK: ESC behavior
 
     @Test func escClearsFilter_whenQueryNonEmpty() {
         var state = FuzzyPickerState(candidates: ["alpha", "beta"])
@@ -70,15 +62,12 @@ struct FuzzyPickerStateTests {
         #expect(outcome == .cancelled)
     }
 
-    // MARK: navigation & confirm
-
     @Test func navigationFollowsFilteredList() {
         var state = FuzzyPickerState(candidates: ["alpha", "one", "gamma"])
         state.apply(.char("a"))
         state.apply(.moveDown)
         let outcome = state.apply(.confirm)
         if case .accepted(let idx) = outcome {
-            // Visible: alpha, gamma. Move down from 0 → 1 (gamma).
             #expect(state.candidates[idx] == "gamma")
         } else {
             #expect(Bool(false), "expected accepted")
@@ -92,8 +81,6 @@ struct FuzzyPickerStateTests {
         #expect(outcome == .pending)
     }
 
-    // MARK: matched-position highlights
-
     @Test func visibleCandidatesCarryMatchedPositions() {
         var state = FuzzyPickerState(candidates: ["no-cache", "verbose"])
         state.apply(.char("n"))
@@ -102,8 +89,6 @@ struct FuzzyPickerStateTests {
         #expect(top?.candidate == "no-cache")
         #expect(top?.matchedPositions.isEmpty == false)
     }
-
-    // MARK: flag-query dash-strip
 
     @Test func flagCandidates_leadingDashStrippedFromQuery() {
         var state = FuzzyPickerState(candidates: ["--no-cache", "--verbose"])

@@ -96,7 +96,6 @@ struct DoctorWrapperStateTests {
             )]
         )
         let fileSystem = MockFileSystem()
-        // bin/hello is intentionally absent — wrapper was removed manually.
         let report = diagnose(spellCount: 1, stateSnapshot: snapshot, fileSystem: fileSystem)
         let warnings = report.items.filter {
             $0.category == .wrappers && $0.severity == .warning
@@ -166,8 +165,6 @@ struct DoctorWrapperStateTests {
         let message = try #require(stale?.message)
         #expect(message.contains("shared (was /parent/spells.yaml)"))
     }
-
-    // MARK: - Helpers
 
     private func diagnose(
         spellCount: Int,

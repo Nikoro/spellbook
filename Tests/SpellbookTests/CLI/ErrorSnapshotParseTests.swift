@@ -3,8 +3,6 @@ import Testing
 
 struct ErrorSnapshotParseTests {
 
-    // MARK: - YAML errors
-
     @Test func tabIndentation() {
         snap(.tabIndentation(line: 3), named: "error-tabIndentation")
     }
@@ -29,8 +27,6 @@ struct ErrorSnapshotParseTests {
         snap(.unsupportedSequenceItem(line: 9), named: "error-unsupportedSequenceItem")
     }
 
-    // MARK: - Manifest errors
-
     @Test func walkUpTooDeep() {
         snap(.walkUpTooDeep(path: "/very/deep/path"), named: "error-walkUpTooDeep")
     }
@@ -54,8 +50,6 @@ struct ErrorSnapshotParseTests {
     @Test func mixedManifestMode() {
         snap(.mixedManifestMode, named: "error-mixedManifestMode")
     }
-
-    // MARK: - Structure errors
 
     @Test func unsupportedManifestVersion() {
         snap(.unsupportedManifestVersion(value: "2"), named: "error-unsupportedManifestVersion")
@@ -84,8 +78,6 @@ struct ErrorSnapshotParseTests {
         )
     }
 
-    // MARK: - Naming errors
-
     @Test func invalidSpellName() {
         snap(.invalidSpellName(name: "123bad"), named: "error-invalidSpellName")
     }
@@ -93,8 +85,6 @@ struct ErrorSnapshotParseTests {
     @Test func duplicateSpellName() {
         snap(.duplicateSpellName(name: "build"), named: "error-duplicateSpellName")
     }
-
-    // MARK: - Helper
 
     private func snap(_ error: SpellbookError, named name: String) {
         let output = ErrorReporter.render(error, color: false)

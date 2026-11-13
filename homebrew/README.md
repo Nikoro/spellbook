@@ -38,3 +38,6 @@ brew install --build-from-source ./homebrew/spellbook.rb
 
 Requires the release artifacts to exist at the expected URL first. For local
 development prefer the curl installer path in `install.sh`.
+
+The release SHA256 comes from `spells-macos-arm64.sha256`, attached by
+`.github/workflows/release.yml`. `homebrew/bump.sh vX.Y.Z` renders the formula.

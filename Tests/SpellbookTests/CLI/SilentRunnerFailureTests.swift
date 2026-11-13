@@ -3,8 +3,6 @@ import Testing
 
 struct SilentRunnerFailureTests {
 
-    // MARK: - US-007B: Failure path
-
     @Test func silentFailure_flushesStdout() throws {
         let cap = MockCapturingRunner()
         cap.result = CapturedProcessResult(
@@ -58,8 +56,6 @@ struct SilentRunnerFailureTests {
         #expect(code == 7)
     }
 
-    // MARK: - US-007C: Buffer overflow
-
     @Test func overflow_showsWarning() throws {
         let cap = overflowRunner(
             stdout: Array("big\n".utf8)
@@ -96,8 +92,6 @@ struct SilentRunnerFailureTests {
         #expect(sut.terminal.cursorHidden == false)
     }
 }
-
-// MARK: - Helpers
 
 extension SilentRunnerFailureTests {
     struct SUT {

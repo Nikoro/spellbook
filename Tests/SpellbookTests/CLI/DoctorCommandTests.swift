@@ -67,8 +67,6 @@ struct DoctorCommandTests {
         })
     }
 
-    // MARK: - Helpers
-
     private struct TestEnvironment {
         let fileSystem: MockFileSystem
         let reader: MockManifestReader

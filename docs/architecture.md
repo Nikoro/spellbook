@@ -2,7 +2,7 @@
 
 Spellbook is a macOS-first native Swift CLI for defining project commands as YAML-backed "spells", activating them as shell wrapper commands, and invoking them with safe params, switches, inheritance, overrides, and polished diagnostics. It ships as a single zero-runtime-dependency binary that makes project command workflows easier to share, run, and debug than ad hoc shell aliases.
 
-This document summarizes the architectural boundaries contributors should preserve. Locked product behavior lives in [`product-decisions.md`](./product-decisions.md), sequencing and verified status live in [`roadmap.md`](./roadmap.md) and [`project-status.md`](./project-status.md), and detailed file responsibilities live in [`module-map.md`](./module-map.md).
+This document summarizes the architectural boundaries contributors should preserve. Locked product behavior lives in [`product-decisions.md`](./product-decisions.md), sequencing and verified status live in [`roadmap.md`](./roadmap.md) and [`verification.md`](./verification.md), and detailed file responsibilities live in [`module-map.md`](./module-map.md).
 
 ## Intended Users
 
@@ -114,3 +114,14 @@ Top-level aliases cannot shadow commands in `$PATH`. Override is supported only 
 ## Module Responsibilities
 
 The current file-level module map lives in [`module-map.md`](./module-map.md). Keep new files aligned with that ownership model unless the product decisions change.
+
+## Terminal rendering and completion fallback
+
+Picker rows use CRLF without a trailing CRLF. The cursor remains at the final
+rendered row, so clearing the block moves up `lineCount - 1` rows before erasing
+to the end of the screen. Adding a final newline would move one row too far.
+Picker outcomes index the original candidate array, not the filtered display.
+
+If completion cannot resolve a manifest, it probes the common manifest names in
+the current directory because no resolved project path is available. Cache writes
+are best effort: a filesystem failure must not prevent the underlying command.

@@ -37,8 +37,6 @@ final class PipeCollector: @unchecked Sendable {
     }
 }
 
-// MARK: - Pipe reading
-
 extension PipeCollector {
     private func startReader(
         handle: FileHandle,
@@ -75,8 +73,6 @@ extension PipeCollector {
         }
     }
 }
-
-// MARK: - Buffer management
 
 extension PipeCollector {
     private var bufferExceeded: Bool {

@@ -68,7 +68,6 @@ struct AtomicWrapperWriterTests {
         let directory = try makeTempDir()
         defer { try? FileManager.default.removeItem(atPath: directory) }
         let writer = AtomicWrapperWriter()
-        // Must not throw.
         try writer.removeWrapper(at: directory + "/missing")
     }
 

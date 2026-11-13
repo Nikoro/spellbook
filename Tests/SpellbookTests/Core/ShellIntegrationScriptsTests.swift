@@ -3,8 +3,6 @@ import Testing
 
 struct ShellIntegrationScriptsTests {
 
-    // MARK: zsh
-
     @Test func zsh_containsVersionMarker() {
         let script = ShellIntegrationScripts.script(for: .zsh)
         #expect(script.contains("# Spellbook integration v"))
@@ -30,8 +28,6 @@ struct ShellIntegrationScriptsTests {
     }
 
     @Test func zsh_resumesPickerInPrecmd() {
-        // The widget defers multi-candidate picker execution to precmd so
-        // zle releases the terminal while the picker runs.
         let script = ShellIntegrationScripts.script(for: .zsh)
         #expect(script.contains("_spells_resume_picker"))
         #expect(script.contains("add-zsh-hook precmd"))
@@ -42,8 +38,6 @@ struct ShellIntegrationScriptsTests {
         let script = ShellIntegrationScripts.script(for: .zsh)
         #expect(script.contains("SPELLBOOK_HOME/bin"))
     }
-
-    // MARK: bash
 
     @Test func bash_containsVersionMarker() {
         let script = ShellIntegrationScripts.script(for: .bash)
@@ -66,8 +60,6 @@ struct ShellIntegrationScriptsTests {
         let script = ShellIntegrationScripts.script(for: .bash)
         #expect(script.contains("SPELLBOOK_HOME/bin"))
     }
-
-    // MARK: fish
 
     @Test func fish_containsVersionMarker() {
         let script = ShellIntegrationScripts.script(for: .fish)
@@ -94,8 +86,6 @@ struct ShellIntegrationScriptsTests {
         let script = ShellIntegrationScripts.script(for: .fish)
         #expect(script.contains("__SPELLBOOK_FALLTHROUGH__"))
     }
-
-    // MARK: custom picker wiring (FR-39)
 
     @Test func zsh_routesMultipleCandidatesThroughSpellsPick() {
         let script = ShellIntegrationScripts.script(for: .zsh)

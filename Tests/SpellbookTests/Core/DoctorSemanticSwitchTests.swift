@@ -105,8 +105,6 @@ struct DoctorSemanticSwitchTests {
         #expect(warnings.count == 1)
     }
 
-    // MARK: - Helpers
-
     private func diagnose(manifest: SpellbookManifest) -> DoctorReport {
         let result = ActivationResult(
             manifest: manifest,

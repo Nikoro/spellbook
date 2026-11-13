@@ -19,16 +19,12 @@ public enum HelpGenerator {
         return lines.joined(separator: "\n")
     }
 
-    // MARK: - Header
-
     private static func headerLine(_ spell: SpellDefinition) -> String {
         if let desc = spell.description {
             return "\(spell.name) — \(desc)"
         }
         return spell.name
     }
-
-    // MARK: - Params
 
     private static func paramLines(
         _ params: [ParamDefinition]
@@ -60,8 +56,6 @@ public enum HelpGenerator {
         }
         return parts.joined(separator: "  ")
     }
-
-    // MARK: - Switches
 
     private static func switchLines(
         _ branches: SwitchDefinition?

@@ -17,3 +17,5 @@ DerivedData/
 
 # added by ralph
 .ralph/
+.tools/
+__pycache__/

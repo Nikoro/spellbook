@@ -9,8 +9,6 @@ enum PathShadowValidator {
             + aliasPathErrors(for: spell, checker: checker)
     }
 
-    // MARK: - Shell-state denylist
-
     private static func denylistErrors(
         for spell: SpellDefinition
     ) -> [SpellbookError] {
@@ -25,8 +23,6 @@ enum PathShadowValidator {
             .filter(ShellStateDenylist.contains)
             .map { .aliasIsShellStateBuiltin(spell: spell.name, alias: $0) }
     }
-
-    // MARK: - Path shadow
 
     private static func nameError(
         for spell: SpellDefinition,

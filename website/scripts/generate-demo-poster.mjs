@@ -1,13 +1,4 @@
 #!/usr/bin/env bun
-/**
- * Generates a temporary demo-poster.png until the real demo video is recorded
- * (US-005). The poster is a 1280x720 dark canvas with the wordmark centered
- * and a "demo coming soon" line so the hero <video> element shows something
- * meaningful before demo.webm/demo.mp4 are committed.
- *
- * Replace this output with a real frame from the recorded demo video before
- * launch.
- */
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';

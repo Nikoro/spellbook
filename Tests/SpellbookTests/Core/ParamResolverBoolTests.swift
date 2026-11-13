@@ -4,8 +4,6 @@ import Testing
 struct ParamResolverBoolTests {
     private let resolver = ParamResolver()
 
-    // MARK: - Named Bool Flag Toggle
-
     @Test func boolFlag_noFollowingToken_togglesToTrue() throws {
         let verbose = boolFlag(name: "verbose", flags: ["--verbose"])
         let result = try resolve(argv: ["--verbose"], params: [verbose])
@@ -28,8 +26,6 @@ struct ParamResolverBoolTests {
         #expect(result.values == ["verbose": "true"])
     }
 
-    // MARK: - Named Bool Flag Explicit Value
-
     @Test func boolFlag_followedByTrue_consumesExplicitTrue() throws {
         let verbose = boolFlag(name: "verbose", flags: ["--verbose"])
         let result = try resolve(argv: ["--verbose", "true"], params: [verbose])
@@ -43,8 +39,6 @@ struct ParamResolverBoolTests {
         )
         #expect(result.values == ["verbose": "false"])
     }
-
-    // MARK: - Bool Flag Followed By Non-Bool Token
 
     @Test func boolFlag_followedByNonBool_toggles_tokenIsPositional() throws {
         let params = [
@@ -65,15 +59,11 @@ struct ParamResolverBoolTests {
         #expect(result.passthrough == ["prod"])
     }
 
-    // MARK: - Bool Flag Short Form
-
     @Test func boolFlag_shortFlag_togglesToTrue() throws {
         let verbose = boolFlag(name: "verbose", flags: ["-v", "--verbose"])
         let result = try resolve(argv: ["-v"], params: [verbose])
         #expect(result.values == ["verbose": "true"])
     }
-
-    // MARK: - Positional Bool
 
     @Test func positionalBool_consumesTrue() throws {
         let dryRun = ParamDefinition(
@@ -104,8 +94,6 @@ struct ParamResolverBoolTests {
         let result = try resolve(argv: [], params: [dryRun])
         #expect(result.values == ["dry_run": "true"])
     }
-
-    // MARK: - Helpers
 
     private func boolFlag(
         name: String,

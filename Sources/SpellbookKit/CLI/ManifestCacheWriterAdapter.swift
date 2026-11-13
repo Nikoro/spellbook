@@ -40,7 +40,6 @@ public struct ManifestCacheWriterAdapter {
             }
             try fileManager.moveItem(atPath: tempPath, toPath: finalPath)
         } catch {
-            // Best-effort: swallow any filesystem error.
             _ = try? fileManager.removeItem(atPath: tempPath)
         }
     }

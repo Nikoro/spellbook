@@ -3,8 +3,6 @@ import Testing
 
 struct ErrorSnapshotRuntimeTests {
 
-    // MARK: - Naming continued
-
     @Test func invalidParamName() {
         snap(.invalidParamName(spell: "greet", name: "1x"), named: "error-invalidParamName")
     }
@@ -29,8 +27,6 @@ struct ErrorSnapshotRuntimeTests {
         snap(.switchDuplicateName(spell: "deploy", name: "staging"), named: "error-switchDuplicateName")
     }
 
-    // MARK: - Switch errors
-
     @Test func defaultKeyNotFound() {
         snap(.defaultKeyNotFound(spell: "deploy", key: "prod"), named: "error-defaultKeyNotFound")
     }
@@ -45,8 +41,6 @@ struct ErrorSnapshotRuntimeTests {
     @Test func selectionCancelled() {
         snap(.selectionCancelled(spell: "deploy"), named: "error-selectionCancelled")
     }
-
-    // MARK: - Shadow errors
 
     @Test func spellIsShellStateBuiltin() {
         snap(.spellIsShellStateBuiltin(spell: "cd"), named: "error-spellIsShellStateBuiltin")
@@ -63,8 +57,6 @@ struct ErrorSnapshotRuntimeTests {
     @Test func aliasShadowsPathBinary() {
         snap(.aliasShadowsPathBinary(spell: "myls", alias: "ls"), named: "error-aliasShadowsPathBinary")
     }
-
-    // MARK: - Argument errors
 
     @Test func missingRequiredParam() {
         snap(
@@ -103,8 +95,6 @@ struct ErrorSnapshotRuntimeTests {
             named: "error-invalidParamValue"
         )
     }
-
-    // MARK: - Resolution & command errors
 
     @Test func spellNotFound() {
         snap(.spellNotFound(name: "bild"), named: "error-spellNotFound")
@@ -158,8 +148,6 @@ struct ErrorSnapshotRuntimeTests {
     @Test func initMissingShell() {
         snap(.initMissingShell, named: "error-initMissingShell")
     }
-
-    // MARK: - Helper
 
     private func snap(_ error: SpellbookError, named name: String) {
         let output = ErrorReporter.render(error, color: false)

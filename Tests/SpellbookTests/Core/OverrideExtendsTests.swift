@@ -3,8 +3,6 @@ import Testing
 
 struct OverrideExtendsTests {
 
-    // MARK: - Extends preserves closer-manifest override semantics
-
     @Test func parentOverrideSpell_inheritedByChild() throws {
         let parent = SpellbookManifest(spells: [
             SpellDefinition(

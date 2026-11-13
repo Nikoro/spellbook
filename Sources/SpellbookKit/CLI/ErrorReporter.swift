@@ -12,8 +12,6 @@ public enum ErrorReporter {
         return rendered.formatted(color: color)
     }
 
-    // MARK: - YAML errors (3 cases)
-
     static func renderYAML(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -41,8 +39,6 @@ public enum ErrorReporter {
         }
     }
 
-    // MARK: - YAML errors continued (3 cases)
-
     static func renderYAMLExtra(
         _ error: SpellbookError
     ) -> RenderedError? {
@@ -69,8 +65,6 @@ public enum ErrorReporter {
             return nil
         }
     }
-
-    // MARK: - Manifest errors (6 cases)
 
     static func renderManifest(
         _ error: SpellbookError

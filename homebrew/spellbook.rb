@@ -1,16 +1,7 @@
-# Draft Homebrew formula for Spellbook.
-#
-# Intended location after 1.0: a dedicated tap at `Nikoro/homebrew-spellbook`
-# (file path `Formula/spellbook.rb`). While the tap is not published yet this
-# draft lives inside the main repo so release tooling can bump `version`,
-# `url`, and `sha256` in one place.
-#
-# Release workflow fills in the SHA256 value from the
-# `spells-macos-arm64.sha256` artifact produced by `.github/workflows/release.yml`.
 class Spellbook < Formula
   desc "Project-scoped YAML spells turned into shell commands, macOS-first"
   homepage "https://github.com/Nikoro/spellbook"
-  version "0.0.0" # bumped by release tooling
+  version "0.0.0"
 
   depends_on arch: :arm64
   depends_on :macos

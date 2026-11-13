@@ -1,0 +1,10 @@
+- `docs/architecture.md` — intended users, design principles, layer boundaries, manifest/runtime model, out-of-scope list.
+- `docs/product-decisions.md` — locked behavior, manifest/runtime semantics, Phase 3 wrapper-completion spec.
+- `docs/module-map.md` — module responsibilities and test ownership.
+- `docs/roadmap.md` — product scope, follow-ups, milestones, risks and deferred decisions.
+- `docs/verification.md` — repeatable verification and release evidence.
+- `docs/development-workflow.md` — how agents should make changes.
+- `docs/testing.md` — TDD rules, test layout, test commands.
+- `docs/quality-gates.md` — required checks, local scripts, release perf budgets.
+- `docs/git-and-changelog.md` — commit, staging, changelog policy.
+- `docs/website.md` — public site, local development, URL contracts and CI triggers.

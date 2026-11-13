@@ -3,8 +3,6 @@ import Testing
 
 struct ActivationIntegrationTests {
 
-    // MARK: - Successful activation
-
     @Test func activation_writesWrappersAndState() throws {
         let env = makeEnvironment()
         env.fileSystem.files.insert("/project/spells.yaml")
@@ -38,8 +36,6 @@ struct ActivationIntegrationTests {
         #expect(summary.wrapperCount == 2)
     }
 
-    // MARK: - Home fallback source
-
     @Test func activation_homeFallback_identifiesSource() throws {
         let env = makeEnvironment(home: "/Users/me")
         env.fileSystem.files.insert("/Users/me/spells.yaml")
@@ -52,8 +48,6 @@ struct ActivationIntegrationTests {
         #expect(summary.source == .homeFallback)
         #expect(summary.manifestPath == "/Users/me/spells.yaml")
     }
-
-    // MARK: - State records project
 
     @Test func activation_stateRecordsProject() throws {
         let env = makeEnvironment()
@@ -98,8 +92,6 @@ struct ActivationIntegrationTests {
         #expect(project.spells["test"]?.origin == "/shared/spells.yaml")
     }
 
-    // MARK: - Validation failure prevents writes
-
     @Test func validationFailure_noWrappersOrState() {
         let env = makeEnvironment()
         env.fileSystem.files.insert("/project/spells.yaml")
@@ -114,8 +106,6 @@ struct ActivationIntegrationTests {
         #expect(env.state.stored == nil)
     }
 
-    // MARK: - Wrapper failure prevents state
-
     @Test func wrapperWriteFailure_noStateWritten() {
         let env = makeEnvironment()
         env.fileSystem.files.insert("/project/spells.yaml")
@@ -129,8 +119,6 @@ struct ActivationIntegrationTests {
         }
         #expect(env.state.stored == nil)
     }
-
-    // MARK: - Helpers
 
     private struct TestEnvironment {
         let fileSystem: MockFileSystem

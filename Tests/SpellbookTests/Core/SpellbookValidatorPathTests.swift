@@ -66,8 +66,6 @@ struct SpellbookValidatorPathTests {
         #expect(validator.validate(manifest) == [])
     }
 
-    // MARK: - Shell-state denylist
-
     @Test func spellOnDenylist_isRejected() {
         let checker = MockPathBinaryChecker(binaries: [])
         let validator = SpellbookValidator(pathChecker: checker)

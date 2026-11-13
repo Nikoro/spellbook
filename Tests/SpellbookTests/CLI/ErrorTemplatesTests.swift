@@ -3,8 +3,6 @@ import Testing
 
 struct ErrorTemplatesTests {
 
-    // MARK: - Plain mode
-
     @Test func header_plainMode() {
         let result = ErrorTemplates.header("something went wrong", color: false)
         #expect(result == "error: something went wrong")
@@ -44,8 +42,6 @@ struct ErrorTemplatesTests {
         let result = ErrorTemplates.compose(header: "error: simple")
         #expect(result == "error: simple")
     }
-
-    // MARK: - Color mode
 
     @Test func header_colorMode_containsANSI() {
         let result = ErrorTemplates.header("bad", color: true)

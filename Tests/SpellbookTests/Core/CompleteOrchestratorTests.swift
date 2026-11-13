@@ -39,7 +39,6 @@ struct CompleteOrchestratorTests {
             wrapper: "sbdeploy", cword: 1, tokens: ["sbdeploy", "st"]
         )
         let lines = CompleteOrchestrator.compute(args: args, manifest: book)
-        // `st` fuzzy-matches "staging" (prefix).
         #expect(lines.first.flatMap { $0.split(separator: "\t").first.map(String.init) }
                 == "staging")
     }
@@ -54,7 +53,6 @@ struct CompleteOrchestratorTests {
     }
 
     @Test func fallthroughSentinel_isEmittedAsSingleLine() {
-        // String positional without enum → fallthrough
         let param = ParamDefinition(
             name: "file",
             shape: ParamShape(isRequired: true, isPositional: true),

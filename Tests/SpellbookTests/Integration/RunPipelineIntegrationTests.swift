@@ -3,8 +3,6 @@ import Testing
 
 struct RunPipelineIntegrationTests {
 
-    // MARK: - Simple script spell
-
     @Test func simpleSpell_executesResolvedScript() throws {
         let runner = MockProcessRunner()
         let prepared = try resolve(
@@ -21,8 +19,6 @@ struct RunPipelineIntegrationTests {
         #expect(inv.workingDirectory == "/project")
         #expect(inv.environment?["SPELLBOOK_SPELL_NAME"] == "hello")
     }
-
-    // MARK: - Parameterized spell
 
     @Test func parameterizedSpell_substitutesValues() throws {
         let runner = MockProcessRunner()
@@ -47,8 +43,6 @@ struct RunPipelineIntegrationTests {
         #expect(inv.arguments == ["bash", "-c", "echo 'Alice' 'hi'"])
     }
 
-    // MARK: - Switch selection
-
     @Test func switchBranch_resolvesCorrectScript() throws {
         let runner = MockProcessRunner()
         let prepared = try resolve(
@@ -63,8 +57,6 @@ struct RunPipelineIntegrationTests {
         let inv = try #require(runner.invocations.first)
         #expect(inv.arguments == ["bash", "-c", "deploy -e staging"])
     }
-
-    // MARK: - Default branch
 
     @Test func defaultBranch_usedWhenNoArg() throws {
         let runner = MockProcessRunner()
@@ -82,8 +74,6 @@ struct RunPipelineIntegrationTests {
         #expect(inv.arguments == ["bash", "-c", "make debug"])
     }
 
-    // MARK: - Exit code forwarded
-
     @Test func exitCode_forwardedFromExecution() throws {
         let runner = MockProcessRunner()
         runner.exitCode = 1
@@ -96,8 +86,6 @@ struct RunPipelineIntegrationTests {
         let code = try execute(prepared, with: runner)
         #expect(code == 1)
     }
-
-    // MARK: - Helpers
 
     @discardableResult
     private func execute(

@@ -5,8 +5,6 @@ struct SwitchNavigatorTests {
 
     private let navigator = SwitchNavigator()
 
-    // MARK: - No switches
-
     @Test func noSwitches_returnsSpellAndAllArgv() throws {
         let spell = SpellDefinition(name: "hello", script: "echo hi")
         let result = try navigator.resolve(
@@ -15,8 +13,6 @@ struct SwitchNavigatorTests {
         #expect(result.terminal.script == "echo hi")
         #expect(result.remainingArgv == ["--flag", "val"])
     }
-
-    // MARK: - Match by canonical name
 
     @Test func matchByCanonicalName_consumesArg() throws {
         let spell = switchSpell(options: [
@@ -30,8 +26,6 @@ struct SwitchNavigatorTests {
         #expect(result.remainingArgv == ["--verbose"])
     }
 
-    // MARK: - Match by alias
-
     @Test func matchByAlias_consumesArg() throws {
         let spell = switchSpell(options: [
             option("development", aliases: ["dev", "d"], script: "run dev"),
@@ -43,8 +37,6 @@ struct SwitchNavigatorTests {
         #expect(result.terminal.script == "run dev")
         #expect(result.remainingArgv == [])
     }
-
-    // MARK: - Default key
 
     @Test func noArg_defaultKey_usesDefault() throws {
         let spell = switchSpell(
@@ -61,8 +53,6 @@ struct SwitchNavigatorTests {
         #expect(result.remainingArgv == [])
     }
 
-    // MARK: - Inline default
-
     @Test func noArg_inlineDefault_usesInline() throws {
         let inline = SpellDefinition(name: "deploy", script: "run default")
         let spell = switchSpell(
@@ -75,8 +65,6 @@ struct SwitchNavigatorTests {
         #expect(result.terminal.script == "run default")
     }
 
-    // MARK: - No default, no arg
-
     @Test func noArg_noDefault_throws() {
         let spell = switchSpell(options: [
             option("dev", script: "run dev"),
@@ -86,8 +74,6 @@ struct SwitchNavigatorTests {
             try navigator.resolve(spell: spell, argv: [], spellName: "deploy")
         }
     }
-
-    // MARK: - Unknown option, no default
 
     @Test func unknownArg_noDefault_throwsOptionNotFound() {
         let spell = switchSpell(options: [
@@ -100,8 +86,6 @@ struct SwitchNavigatorTests {
             try navigator.resolve(spell: spell, argv: ["staging"], spellName: "deploy")
         }
     }
-
-    // MARK: - Unknown option with default falls back
 
     @Test func unknownArg_withDefault_usesDefault_keepsArgv() throws {
         let spell = switchSpell(
@@ -117,8 +101,6 @@ struct SwitchNavigatorTests {
         #expect(result.terminal.script == "run dev")
         #expect(result.remainingArgv == ["--verbose"])
     }
-
-    // MARK: - Nested switches
 
     @Test func nestedSwitches_navigatesRecursively() throws {
         let innerSwitch = SwitchDefinition(options: [
@@ -153,8 +135,6 @@ struct SwitchNavigatorTests {
         #expect(result.terminal.script == "build ios")
         #expect(result.remainingArgv == ["--release"])
     }
-
-    // MARK: - Helpers
 
     private func option(
         _ name: String,

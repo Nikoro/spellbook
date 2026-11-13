@@ -56,5 +56,5 @@ In the final response, state either:
 3. Decide whether `CHANGELOG.md` needs an `[Unreleased]` entry.
 4. Run `scripts/check.sh`.
 5. Stage only relevant files.
-6. Commit with a Conventional Commit message and no trailers.
+6. Commit with a Conventional Commit message and only the trailers required by commit_gate.
 7. Report the commit hash, message, checks, changelog decision, and any ignored local reference files.

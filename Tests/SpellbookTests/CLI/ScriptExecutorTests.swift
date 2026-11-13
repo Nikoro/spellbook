@@ -3,8 +3,6 @@ import Testing
 
 struct ScriptExecutorTests {
 
-    // MARK: - Default shell
-
     @Test func defaultShell_isBash() throws {
         let runner = MockProcessRunner()
         let executor = ScriptExecutor(processRunner: runner)
@@ -14,8 +12,6 @@ struct ScriptExecutorTests {
         let invocation = try #require(runner.invocations.first)
         #expect(invocation.arguments == ["bash", "-c", "echo hi"])
     }
-
-    // MARK: - Custom shell
 
     @Test func customShell_overridesDefault() throws {
         let runner = MockProcessRunner()
@@ -37,8 +33,6 @@ struct ScriptExecutorTests {
         #expect(invocation.arguments == ["/bin/sh", "-c", "echo hi"])
     }
 
-    // MARK: - Executable path
-
     @Test func usesUsrBinEnv() throws {
         let runner = MockProcessRunner()
         let executor = ScriptExecutor(processRunner: runner)
@@ -48,8 +42,6 @@ struct ScriptExecutorTests {
         let invocation = try #require(runner.invocations.first)
         #expect(invocation.executablePath == "/usr/bin/env")
     }
-
-    // MARK: - Exit code
 
     @Test func exitCode_forwarded() throws {
         let runner = MockProcessRunner()
@@ -61,8 +53,6 @@ struct ScriptExecutorTests {
         #expect(code == 42)
     }
 
-    // MARK: - Multiline script
-
     @Test func multilineScript_passedUnmodified() throws {
         let runner = MockProcessRunner()
         let executor = ScriptExecutor(processRunner: runner)
@@ -73,8 +63,6 @@ struct ScriptExecutorTests {
         let invocation = try #require(runner.invocations.first)
         #expect(invocation.arguments[2] == script)
     }
-
-    // MARK: - Environment and working directory
 
     @Test func environment_passedThrough() throws {
         let runner = MockProcessRunner()
@@ -107,8 +95,6 @@ struct ScriptExecutorTests {
         #expect(invocation.environment == nil)
         #expect(invocation.workingDirectory == nil)
     }
-
-    // MARK: - Launch failure
 
     @Test func launchFailure_propagatesError() {
         let runner = MockProcessRunner()

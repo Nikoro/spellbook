@@ -3,20 +3,6 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, relative, resolve } from 'node:path';
 
-/**
- * Astro integration that owns build-time content publishing:
- *
- * 1. Mirrors every src/content/docs/docs/<slug>.md into public/docs/<slug>.md
- *    so /docs/<slug>.md is reachable as a raw markdown URL.
- * 2. Generates public/llms.txt — a discovery manifest listing every docs page
- *    URL with its frontmatter description, in sidebar order.
- * 3. Generates public/llms-full.txt — every docs page concatenated in
- *    sidebar order with title separators.
- * 4. Reads CHANGELOG.md from the repo root and writes a content collection
- *    entry at src/content/docs/changelog.md so /changelog renders.
- *
- * Sidebar order matches the order declared in astro.config.mjs.
- */
 
 const SIDEBAR_ORDER = [
   'getting-started',
@@ -56,7 +42,6 @@ async function publish({ websiteRoot, repoRoot, logger }) {
 
   await mkdir(docsPublicDir, { recursive: true });
 
-  // 1. Mirror raw markdown files.
   const mirrored = [];
   for (const slug of SIDEBAR_ORDER) {
     const src = join(docsSrcDir, `${slug}.md`);
@@ -66,7 +51,6 @@ async function publish({ websiteRoot, repoRoot, logger }) {
     mirrored.push(slug);
   }
 
-  // 2. + 3. Generate llms.txt + llms-full.txt.
   const docs = [];
   for (const slug of mirrored) {
     const src = join(docsSrcDir, `${slug}.md`);
@@ -105,7 +89,6 @@ async function publish({ websiteRoot, repoRoot, logger }) {
   ].join('\n');
   await writeFile(join(publicDir, 'llms-full.txt'), llmsFull, 'utf8');
 
-  // 4. Mirror CHANGELOG.md from repo root.
   const changelogSrc = join(repoRoot, 'CHANGELOG.md');
   const changelogDest = join(websiteRoot, 'src', 'content', 'docs', 'changelog.md');
   if (existsSync(changelogSrc)) {
@@ -122,7 +105,6 @@ async function publish({ websiteRoot, repoRoot, logger }) {
     ].join('\n');
     await writeFile(changelogDest, wrapped, 'utf8');
 
-    // Also expose as raw markdown.
     await writeFile(join(publicDir, 'changelog.md'), raw, 'utf8');
   }
 }

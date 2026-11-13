@@ -56,9 +56,6 @@ public enum TTYPickerHarness {
             let marker = index == state.selectedIndex ? ">" : " "
             lines.append(marker + " " + entry.candidate)
         }
-        // Join with CRLF so each row starts at column 0, but do NOT emit a
-        // trailing CRLF — that would advance the cursor past the last line
-        // and make subsequent "cursor up N" over-correct by one line.
         source.write(lines.joined(separator: "\r\n"))
         return lines.count
     }
@@ -67,9 +64,6 @@ public enum TTYPickerHarness {
         source: Source, lineCount: Int
     ) {
         guard lineCount > 0 else { return }
-        // Cursor sits at the end of the last rendered line. Move it to the
-        // start of the block (lineCount - 1 rows up), then erase to end of
-        // screen.
         let rowsUp = lineCount - 1
         if rowsUp > 0 {
             source.write("\r\u{1B}[\(rowsUp)A\u{1B}[J")

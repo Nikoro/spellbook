@@ -5,8 +5,6 @@ struct WorkingDirectoryResolverTests {
 
     private let resolver = WorkingDirectoryResolver()
 
-    // MARK: - Default (nil) returns invocation cwd
-
     @Test func nilWorkingDir_returnsInvocationCwd() {
         let result = resolver.resolve(
             workingDir: nil,
@@ -17,8 +15,6 @@ struct WorkingDirectoryResolverTests {
         #expect(result == "/user/project")
     }
 
-    // MARK: - Absolute path returned as-is
-
     @Test func absolutePath_returnedAsIs() {
         let result = resolver.resolve(
             workingDir: "/tmp/build",
@@ -28,8 +24,6 @@ struct WorkingDirectoryResolverTests {
         )
         #expect(result == "/tmp/build")
     }
-
-    // MARK: - Tilde expansion
 
     @Test func tildeAlone_expandsToHome() {
         let result = resolver.resolve(
@@ -60,8 +54,6 @@ struct WorkingDirectoryResolverTests {
         )
         #expect(result == "~/stuff")
     }
-
-    // MARK: - Relative path resolves from origin manifest directory
 
     @Test func relativePath_resolvesFromOriginDir() {
         let result = resolver.resolve(

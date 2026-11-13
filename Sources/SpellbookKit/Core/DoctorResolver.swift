@@ -24,8 +24,6 @@ public struct DoctorResolver {
         return DoctorReport(items: items)
     }
 
-    // MARK: - Manifest checks
-
     private func manifestChecks(
         result: ActivationResult?,
         error: SpellbookError?
@@ -47,8 +45,6 @@ public struct DoctorResolver {
         return items
     }
 
-    // MARK: - Extends checks
-
     private func extendsChecks(result: ActivationResult) -> [DiagnosticItem] {
         guard result.chain.count > 1 else { return [] }
         return [DiagnosticItem(
@@ -56,8 +52,6 @@ public struct DoctorResolver {
             message: "Extends chain: " + result.chain.joined(separator: " → ")
         )]
     }
-
-    // MARK: - PATH checks
 
     private func pathChecks(pathEnv: String?, binDir: String) -> [DiagnosticItem] {
         guard let pathEnv else {
@@ -72,8 +66,6 @@ public struct DoctorResolver {
             message: "PATH: \(binDir) is not in PATH. Run `spells init <shell>` for setup instructions"
         )]
     }
-
-    // MARK: - State checks
 
     private func stateChecks(error: SpellbookError?) -> [DiagnosticItem] {
         guard let error else { return [] }
@@ -92,8 +84,6 @@ public struct DoctorResolver {
             return "\(error)"
         }
     }
-
-    // MARK: - Wrapper state checks
 
     private func wrapperStateChecks(
         manifest: SpellbookManifest,
