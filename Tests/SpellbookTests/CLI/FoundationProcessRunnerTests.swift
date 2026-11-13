@@ -7,7 +7,7 @@ struct FoundationProcessRunnerTests {
         let fixture = try makeFixture()
         defer { try? FileManager.default.removeItem(at: fixture) }
         let executable = spellsExecutablePath()
-        #expect(FileManager.default.isExecutableFile(atPath: executable))
+        try #require(FileManager.default.isExecutableFile(atPath: executable))
         let arguments = makeArguments(executable: executable, fixture: fixture.path)
         defer {
             for case let argument? in arguments {
@@ -17,7 +17,7 @@ struct FoundationProcessRunnerTests {
         var ptyDescriptor: Int32 = -1
         let child = forkpty(&ptyDescriptor, nil, nil, nil)
 
-        #expect(child >= 0)
+        try #require(child >= 0)
         if child == 0 {
             execute(executable: executable, arguments: arguments)
         }
@@ -35,7 +35,7 @@ struct FoundationProcessRunnerTests {
         let manifest = """
         spells:
           sb-e2e-foreground-probe:
-            script: child=$(ps -o pgid= -p $$); foreground=$(ps -o tpgid= -p $$); test "$child" = "$foreground"
+            script: child=$(ps -o pgid= -p $$); foreground=$(ps -o tpgid= -p $$); test "$child" -eq "$foreground"
         """
         try manifest.write(to: directory.appendingPathComponent("spells.yaml"), atomically: true, encoding: .utf8)
         return directory
